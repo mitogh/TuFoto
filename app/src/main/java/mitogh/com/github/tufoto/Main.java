@@ -1,17 +1,30 @@
 package mitogh.com.github.tufoto;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.ImageView;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 
 public class Main extends ActionBarActivity {
+
+    @InjectView(R.id.button_take_picture)
+    Button takePicture;
+
+    @InjectView(R.id.imageview_show_picture)
+    ImageView showPicture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ButterKnife.inject(this);
     }
 
 
