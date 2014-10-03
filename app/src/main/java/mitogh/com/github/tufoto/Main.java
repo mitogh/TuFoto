@@ -1,9 +1,12 @@
 package mitogh.com.github.tufoto;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -11,7 +14,10 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 
-public class Main extends ActionBarActivity {
+public class Main extends ActionBarActivity implements View.OnClickListener {
+
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+
 
     @InjectView(R.id.button_take_picture)
     Button takePicture;
@@ -25,8 +31,20 @@ public class Main extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         ButterKnife.inject(this);
+
+        takePicture.setOnClickListener(this);
     }
 
+    public void onClick(View v){
+        dispatchTakePictureIntent();
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
