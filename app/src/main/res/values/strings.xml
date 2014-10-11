@@ -4,5 +4,6 @@
     <string name="app_name">Tu Foto</string>
     <string name="action_settings">Settings</string>
     <string name="button_take_picture_label">Take picture !</string>
+    <string name="button_select_picture_label">Select From Library</string>
 
 </resources>
