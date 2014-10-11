@@ -28,9 +28,10 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_TAKE_PHOTO = 1;
 
+    static final String FILE_PATH = "FILE_PATH";
+
     private String mCurrentPhotoPath;
     File lastSavedFile;
-
 
     @InjectView(R.id.button_take_picture)
     Button takePicture;
@@ -47,8 +48,6 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
 
         takePicture.setOnClickListener(this);
     }
-
-
 
     public void onClick(View v){
         dispatchTakePictureIntent();
@@ -105,7 +104,7 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
 
     private void galleryAddPic() {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        File f = new File(mCurrentPhotoPath);
+        new File(mCurrentPhotoPath);
         Uri contentUri = Uri.fromFile(f);
         mediaScanIntent.setData(contentUri);
         this.sendBroadcast(mediaScanIntent);
@@ -127,12 +126,12 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
     public void onSaveInstanceState(Bundle savedInstanceState){
         super.onSaveInstanceState(savedInstanceState);
 
-        savedInstanceState.putString("FilePath", mCurrentPhotoPath);
+        savedInstanceState.putString(FILE_PATH, mCurrentPhotoPath);
     }
 
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        mCurrentPhotoPath = savedInstanceState.getString("FilePath");
+        mCurrentPhotoPath = savedInstanceState.getString(FILE_PATH);
     }
 
         @Override
