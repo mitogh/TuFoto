@@ -2,12 +2,11 @@ package mitogh.com.github.tufoto;
 
 import android.os.Environment;
 
-import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class FileName{
+public class ImageFile {
 
     private static final String format = "yyyyMMdd_HHmmss";
 
@@ -17,7 +16,7 @@ public class FileName{
 
     private static final String EXTENSION = ".jpg";
 
-    private static final File STORAGE_DIRECTORY = Environment.getExternalStoragePublicDirectory(
+    private static final java.io.File STORAGE_DIRECTORY = Environment.getExternalStoragePublicDirectory(
             Environment.DIRECTORY_PICTURES
     );
 
@@ -25,10 +24,10 @@ public class FileName{
 
     private StringBuilder imageFileName = new StringBuilder();
 
-    public File image;
+    public java.io.File image;
 
 
-    public FileName() throws IOException {
+    public ImageFile() throws IOException {
         this.generate();
     }
 
@@ -38,7 +37,7 @@ public class FileName{
 
         createImageFileName();
 
-        image = File.createTempFile(
+        image = java.io.File.createTempFile(
                 getImageFileName(),
                 EXTENSION,
                 STORAGE_DIRECTORY
@@ -56,7 +55,7 @@ public class FileName{
         );
     }
 
-    public File getImageFile(){
+    public java.io.File getImageFile(){
         return image;
     }
 
