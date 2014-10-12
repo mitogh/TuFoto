@@ -2,10 +2,7 @@ package mitogh.com.github.tufoto;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -24,6 +21,7 @@ import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import mitogh.com.github.tufoto.Image.ProcessImage;
 
 
 public class Main extends ActionBarActivity implements View.OnClickListener {
@@ -39,9 +37,11 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
 
     java.io.File lastSavedFile;
 
-    @InjectView(R.id.button_take_picture) Button takePicture;
+    @InjectView(R.id.button_take_picture)
+    Button takePicture;
 
-    @InjectView(R.id.imageview_show_picture) ImageView showPicture;
+    @InjectView(R.id.imageview_show_picture)
+    ImageView showPicture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +54,8 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
     }
 
 
-
-    public void onClick(View v){
-                dispatchTakePictureIntent();
+    public void onClick(View v) {
+        dispatchTakePictureIntent();
     }
 
     private void dispatchTakePictureIntent() {
@@ -81,11 +80,8 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(resultCode == RESULT_OK){
-            switch (requestCode){
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
                 case REQUEST_IMAGE_CAPTURE:
                     //galleryAddPic();
                     setPic();
@@ -106,11 +102,11 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
 
     private Target target = new Target() {
         @Override
-        public void onPrepareLoad(Drawable drawable){
+        public void onPrepareLoad(Drawable drawable) {
         }
 
         @Override
-        public void onBitmapLoaded(Bitmap photo, Picasso.LoadedFrom from){
+        public void onBitmapLoaded(Bitmap photo, Picasso.LoadedFrom from) {
             showPicture.setImageBitmap(
                     loadImage()
             );
@@ -119,11 +115,9 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
         }
 
         @Override
-        public void onBitmapFailed(Drawable arg0)
-        {
+        public void onBitmapFailed(Drawable arg0) {
         }
     };
-
 
 
     private void setPic() {
@@ -132,55 +126,17 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
     }
 
     public Bitmap loadImage() {
-            int targetW = showPicture.getWidth();
-            int targetH = showPicture.getHeight();
-
-            // Get the dimensions of the bitmap
-            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-            bmOptions.inJustDecodeBounds = true;
-            BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-            int photoW = bmOptions.outWidth;
-            int photoH = bmOptions.outHeight;
-
-            // Determine how much to scale down the image
-            int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
-
-            // Decode the image file into a Bitmap sized to fill the View
-            bmOptions.inJustDecodeBounds = false;
-            bmOptions.inSampleSize = scaleFactor;
-            bmOptions.inPurgeable = true;
-
-        Bitmap bitmap =  BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-
-        try{
-            ExifInterface ei = new ExifInterface(mCurrentPhotoPath);
-            int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-
-            switch(orientation) {
-                case ExifInterface.ORIENTATION_ROTATE_90:
-                    bitmap = RotateBitmap(bitmap, 90);
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_180:
-                    bitmap = RotateBitmap(bitmap, 180);
-                    break;
-                // etc.
-            }
-        }catch( Exception e){
-
-
+        Bitmap bitmap;
+        try {
+            ProcessImage processImage = new ProcessImage(showPicture, mCurrentPhotoPath);
+            bitmap = processImage.getBitmap();
+        } catch (Exception e) {
+            bitmap = null;
         }
-
-        Log.d("Bitmap width: ", String.valueOf(bitmap.getWidth()));
-        Log.d("Bitmap height: ", String.valueOf(bitmap.getHeight()));
 
         return bitmap;
     }
 
-    public static Bitmap RotateBitmap(Bitmap source, float angle){
-        Matrix matrix = new Matrix();
-        matrix.postRotate(angle);
-        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -190,7 +146,7 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState){
+    public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
 
         savedInstanceState.putString(FILE_PATH, mCurrentPhotoPath);
@@ -201,7 +157,7 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
         mCurrentPhotoPath = savedInstanceState.getString(FILE_PATH);
     }
 
-        @Override
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long

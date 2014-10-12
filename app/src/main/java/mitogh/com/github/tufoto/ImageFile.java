@@ -2,29 +2,24 @@ package mitogh.com.github.tufoto;
 
 import android.os.Environment;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ImageFile {
 
-    private static final String format = "yyyyMMdd_HHmmss";
-
+    private static final String FORMAT = "yyyyMMdd_HHmmss";
     private static final String PREFIX = "JPEG_";
-
     private static final String SUFFIX = "_TUFOTO_";
-
     private static final String EXTENSION = ".jpg";
-
     private static final java.io.File STORAGE_DIRECTORY = Environment.getExternalStoragePublicDirectory(
             Environment.DIRECTORY_PICTURES
     );
 
     private StringBuilder timeStamp = new StringBuilder();
-
-    private StringBuilder imageFileName = new StringBuilder();
-
-    public java.io.File image;
+    private StringBuilder fileName = new StringBuilder();
+    public File image;
 
 
     public ImageFile() throws IOException {
@@ -37,8 +32,8 @@ public class ImageFile {
 
         createImageFileName();
 
-        image = java.io.File.createTempFile(
-                getImageFileName(),
+        image = File.createTempFile(
+                getFileName(),
                 EXTENSION,
                 STORAGE_DIRECTORY
         );
@@ -46,7 +41,7 @@ public class ImageFile {
 
 
     private void createImageFileName() {
-        imageFileName.append(
+        fileName.append(
                 PREFIX
         ).append(
                 timeStamp
@@ -59,8 +54,8 @@ public class ImageFile {
         return image;
     }
 
-    private String getImageFileName(){
-        return imageFileName.toString();
+    private String getFileName(){
+        return fileName.toString();
     }
 
     private void appendFileNameToTimeStamp() {
@@ -70,7 +65,7 @@ public class ImageFile {
     }
 
     private static String fileName() {
-        return new SimpleDateFormat(format).format(
+        return new SimpleDateFormat(FORMAT).format(
                 new Date()
         );
     }
