@@ -1,9 +1,11 @@
 package mitogh.com.github.tufoto;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 
 public class SelectFromLibrary extends ActionBarActivity {
@@ -13,6 +15,11 @@ public class SelectFromLibrary extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_from_library);
 
+        Intent intent = getIntent();
+        String imagePath = intent.getStringExtra("IMAGE_PATH");
+
+        Toast.makeText(this, imagePath, Toast.LENGTH_LONG)
+                .show();
     }
 
 
