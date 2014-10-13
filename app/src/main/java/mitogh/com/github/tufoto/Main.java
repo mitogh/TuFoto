@@ -18,13 +18,8 @@ import butterknife.InjectView;
 
 public class Main extends ActionBarActivity implements View.OnClickListener {
 
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-
-    static final String FILE_PATH = "FILE_PATH";
-    private final String EMPTY_STRING = "";
     private static final int SELECT_PICTURE = 1;
-    private String mCurrentPhotoPath;
-
+    private final String EMPTY_STRING = "";
 
     @InjectView(R.id.button_select_picture)
     Button selectPictureButton;
@@ -102,18 +97,6 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-
-        savedInstanceState.putString(FILE_PATH, mCurrentPhotoPath);
-    }
-
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        mCurrentPhotoPath = savedInstanceState.getString(FILE_PATH);
     }
 
     @Override
