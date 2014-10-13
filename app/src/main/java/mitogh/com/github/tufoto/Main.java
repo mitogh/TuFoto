@@ -69,7 +69,7 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
             Toast.makeText(this, getString(R.string.message_problem_retrieving_image), Toast.LENGTH_LONG)
                     .show();
         }else{
-            Intent intent = new Intent(this, SelectFromLibrary.class);
+            Intent intent = new Intent(this, ApplyFrames.class);
             intent.putExtra("IMAGE_PATH", selectedImagePath);
             startActivity(intent);
         }

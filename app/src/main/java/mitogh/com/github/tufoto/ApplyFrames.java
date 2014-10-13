@@ -8,12 +8,12 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 
-public class SelectFromLibrary extends ActionBarActivity {
+public class ApplyFrames extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_select_from_library);
+        setContentView(R.layout.activity_apply_frames);
 
         Intent intent = getIntent();
         String imagePath = intent.getStringExtra("IMAGE_PATH");
