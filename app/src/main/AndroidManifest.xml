@@ -31,7 +31,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AddFrames"
+            android:name=".SelectFromLibrary"
             android:label="@string/title_activity_add_frames" >
         </activity>
     </application>

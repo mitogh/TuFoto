@@ -6,12 +6,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class AddFrames extends ActionBarActivity {
+public class SelectFromLibrary extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_frames);
+        setContentView(R.layout.activity_select_from_library);
     }
 
 

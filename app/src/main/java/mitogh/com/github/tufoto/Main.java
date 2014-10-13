@@ -63,7 +63,7 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
                 break;
 
             case R.id.button_select_picture:
-                Intent intent = new Intent(this, AddFrames.class);
+                Intent intent = new Intent(this, SelectFromLibrary.class);
                 startActivity(intent);
                 break;
         }
