@@ -5,21 +5,32 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 
 public class ApplyFrames extends ActionBarActivity {
+
+    @InjectView(R.id.imageview_show_picture) ImageView showPictureImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_apply_frames);
 
+        ButterKnife.inject(this);
+
         Intent intent = getIntent();
         String imagePath = intent.getStringExtra(Main.IMAGE_PATH);
 
-        Toast.makeText(this, imagePath, Toast.LENGTH_LONG)
-                .show();
+        File tmp = new File(imagePath);
+        Picasso.with(this).load(tmp).into(showPictureImageView);
     }
 
 

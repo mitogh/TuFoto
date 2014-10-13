@@ -47,9 +47,7 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
                 break;
 
             case R.id.button_select_picture:
-
                 selecImageFromLibrary();
-
                 break;
         }
     }
