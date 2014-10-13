@@ -16,7 +16,7 @@ public class ApplyFrames extends ActionBarActivity {
         setContentView(R.layout.activity_apply_frames);
 
         Intent intent = getIntent();
-        String imagePath = intent.getStringExtra("IMAGE_PATH");
+        String imagePath = intent.getStringExtra(Main.IMAGE_PATH);
 
         Toast.makeText(this, imagePath, Toast.LENGTH_LONG)
                 .show();
