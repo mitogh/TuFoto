@@ -1,46 +1,36 @@
 package mitogh.com.github.tufoto;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
-
-import java.io.IOException;
+import android.widget.Toast;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import mitogh.com.github.tufoto.Image.ProcessImage;
 
 
 public class Main extends ActionBarActivity implements View.OnClickListener {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
-    static final int REQUEST_TAKE_PHOTO = 1;
-    private static int LOAD_IMAGE_RESULTS = 1;
-
 
     static final String FILE_PATH = "FILE_PATH";
-
+    private final String EMPTY_STRING = "";
+    private static final int SELECT_PICTURE = 1;
     private String mCurrentPhotoPath;
 
-    java.io.File lastSavedFile;
 
-    @InjectView(R.id.button_select_picture) Button selectPictureButton;
-    @InjectView(R.id.button_take_picture) Button takePictureButton;
+    @InjectView(R.id.button_select_picture)
+    Button selectPictureButton;
+    @InjectView(R.id.button_take_picture)
+    Button takePictureButton;
 
-    @InjectView(R.id.imageview_show_picture) ImageView showPicture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,99 +45,57 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
 
 
     public void onClick(View v) {
-
         int id = v.getId();
-        switch(id){
+        switch (id) {
             case R.id.button_take_picture:
-                dispatchTakePictureIntent();
                 break;
 
             case R.id.button_select_picture:
-                Intent intent = new Intent(this, SelectFromLibrary.class);
-                startActivity(intent);
+
+                Intent intent = new Intent(Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                intent.setType("image/*");
+                startActivityForResult(Intent.createChooser(intent,
+                        "Select Picture"), SELECT_PICTURE);
+
                 break;
-        }
-    }
-
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-
-            try {
-                lastSavedFile = new ImageFile().getImageFile();
-                mCurrentPhotoPath = lastSavedFile.getAbsolutePath();
-            } catch (IOException ex) {
-            }
-
-            if (lastSavedFile != null) {
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                        Uri.fromFile(lastSavedFile));
-                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-
-                setResult(RESULT_OK, takePictureIntent);
-            }
         }
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                case REQUEST_IMAGE_CAPTURE:
-                    //galleryAddPic();
-                    setPic();
-                    break;
-            }
+        String selectedImagePath = "";
+
+        if (resultCode == RESULT_OK && requestCode == SELECT_PICTURE) {
+            Uri selectedImageUri = data.getData();
+            selectedImagePath = getPath(selectedImageUri);
+        }
+
+        if(selectedImagePath.equals(EMPTY_STRING)){
+            Toast.makeText(this, getString(R.string.message_problem_retrieving_image), Toast.LENGTH_LONG)
+                    .show();
+        }else{
+            Intent intent;
         }
     }
 
-
-    private void galleryAddPic() {
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        java.io.File f = new java.io.File(mCurrentPhotoPath);
-        Uri contentUri = Uri.fromFile(f);
-        mediaScanIntent.setData(contentUri);
-        this.sendBroadcast(mediaScanIntent);
+    public String getPath(Uri uri) {
+        // just some safety built in
+        if( uri == null ) {
+            return EMPTY_STRING;
+        }
+        // try to retrieve the image from the media store first
+        // this will only work for images selected from gallery
+        String[] projection = { MediaStore.Images.Media.DATA };
+        Cursor cursor = managedQuery(uri, projection, null, null, null);
+        if( cursor != null ){
+            int column_index = cursor
+                    .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        }
+        // this is our fallback here
+        return uri.getPath();
     }
-
-
-    private Target target = new Target() {
-        @Override
-        public void onPrepareLoad(Drawable drawable) {
-        }
-
-        @Override
-        public void onBitmapLoaded(Bitmap photo, Picasso.LoadedFrom from) {
-            showPicture.setImageBitmap(
-                    loadImage()
-            );
-
-            Log.d("ImageView Width:", String.valueOf(showPicture.getHeight()));
-        }
-
-        @Override
-        public void onBitmapFailed(Drawable arg0) {
-        }
-    };
-
-
-    private void setPic() {
-        java.io.File tmp = new java.io.File(mCurrentPhotoPath);
-        Picasso.with(this).load(tmp).into(target);
-    }
-
-    public Bitmap loadImage() {
-        Bitmap bitmap;
-        try {
-            ProcessImage processImage = new ProcessImage(showPicture, mCurrentPhotoPath);
-            bitmap = processImage.getBitmap();
-        } catch (Exception e) {
-            bitmap = null;
-        }
-
-        return bitmap;
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
