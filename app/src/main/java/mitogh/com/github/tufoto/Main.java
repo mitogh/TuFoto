@@ -37,11 +37,10 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
 
     java.io.File lastSavedFile;
 
-    @InjectView(R.id.button_take_picture)
-    Button takePicture;
+    @InjectView(R.id.button_select_picture) Button selectPictureButton;
+    @InjectView(R.id.button_take_picture) Button takePictureButton;
 
-    @InjectView(R.id.imageview_show_picture)
-    ImageView showPicture;
+    @InjectView(R.id.imageview_show_picture) ImageView showPicture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +49,24 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
 
         ButterKnife.inject(this);
 
-        takePicture.setOnClickListener(this);
+        takePictureButton.setOnClickListener(this);
+        selectPictureButton.setOnClickListener(this);
     }
 
 
     public void onClick(View v) {
-        dispatchTakePictureIntent();
+
+        int id = v.getId();
+        switch(id){
+            case R.id.button_take_picture:
+                dispatchTakePictureIntent();
+                break;
+
+            case R.id.button_select_picture:
+                Intent intent = new Intent(this, AddFrames.class);
+                startActivity(intent);
+                break;
+        }
     }
 
     private void dispatchTakePictureIntent() {
