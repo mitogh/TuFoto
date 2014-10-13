@@ -1,6 +1,8 @@
 package mitogh.com.github.tufoto;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -8,16 +10,20 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.io.File;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import mitogh.com.github.tufoto.Image.ProcessImage;
 
 
 public class ApplyFrames extends ActionBarActivity {
 
     @InjectView(R.id.imageview_show_picture) ImageView showPictureImageView;
+
+    private String imagePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,10 +33,44 @@ public class ApplyFrames extends ActionBarActivity {
         ButterKnife.inject(this);
 
         Intent intent = getIntent();
-        String imagePath = intent.getStringExtra(Main.IMAGE_PATH);
+        imagePath = intent.getStringExtra(Main.IMAGE_PATH);
 
-        File tmp = new File(imagePath);
-        Picasso.with(this).load(tmp).into(showPictureImageView);
+        Picasso.with(
+                getApplicationContext()
+        ).load(
+                new File(imagePath)
+        ).into(
+                callBackToProcessImage
+        );
+    }
+
+    private Target callBackToProcessImage = new Target() {
+        @Override
+        public void onPrepareLoad(Drawable drawable) {
+        }
+
+        @Override
+        public void onBitmapLoaded(Bitmap photo, Picasso.LoadedFrom from) {
+            showPictureImageView.setImageBitmap(
+                    loadImage()
+            );
+        }
+
+        @Override
+        public void onBitmapFailed(Drawable arg0) {
+        }
+    };
+
+    public Bitmap loadImage() {
+        Bitmap bitmap;
+        try {
+            ProcessImage processImage = new ProcessImage(showPictureImageView, imagePath);
+            bitmap = processImage.getBitmap();
+        } catch (Exception e) {
+            bitmap = null;
+        }
+
+        return bitmap;
     }
 
 
