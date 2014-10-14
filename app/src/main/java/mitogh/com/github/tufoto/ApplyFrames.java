@@ -2,7 +2,10 @@ package mitogh.com.github.tufoto;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
+import android.media.ExifInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -16,12 +19,12 @@ import java.io.File;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import mitogh.com.github.tufoto.Image.ProcessImage;
 
 
 public class ApplyFrames extends ActionBarActivity {
 
-    @InjectView(R.id.imageview_show_picture) ImageView showPictureImageView;
+    @InjectView(R.id.imageview_show_picture)
+    ImageView showPictureImageView;
 
     private String imagePath;
 
@@ -62,15 +65,48 @@ public class ApplyFrames extends ActionBarActivity {
     };
 
     public Bitmap loadImage() {
-        Bitmap bitmap;
-        try {
-            ProcessImage processImage = new ProcessImage(showPictureImageView, imagePath);
-            bitmap = processImage.getBitmap();
-        } catch (Exception e) {
-            bitmap = null;
-        }
+        int targetW = showPictureImageView.getWidth();
+        int targetH = showPictureImageView.getHeight();
 
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(imagePath, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(imagePath, bmOptions);
+
+        try {
+            ExifInterface ei = new ExifInterface(imagePath);
+            int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    bitmap = RotateBitmap(bitmap, 90);
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    bitmap = RotateBitmap(bitmap, 180);
+                    break;
+                // etc.
+            }
+        } catch (Exception e) {
+        }
         return bitmap;
+    }
+
+    public static Bitmap RotateBitmap(Bitmap source, float angle){
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }
 
 
@@ -80,6 +116,7 @@ public class ApplyFrames extends ActionBarActivity {
         getMenuInflater().inflate(R.menu.add_frames, menu);
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
