@@ -10,7 +10,9 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -25,6 +27,9 @@ public class ApplyFrames extends ActionBarActivity {
 
     @InjectView(R.id.imageview_show_picture)
     ImageView showPictureImageView;
+
+    @InjectView(R.id.progressbar_image_loading)
+    ProgressBar imageLoadingProgressBar;
 
     private String imagePath;
 
@@ -50,6 +55,7 @@ public class ApplyFrames extends ActionBarActivity {
     private Target callBackToProcessImage = new Target() {
         @Override
         public void onPrepareLoad(Drawable drawable) {
+            imageLoadingProgressBar.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -57,6 +63,7 @@ public class ApplyFrames extends ActionBarActivity {
             showPictureImageView.setImageBitmap(
                     loadImage()
             );
+            imageLoadingProgressBar.setVisibility(View.INVISIBLE);
         }
 
         @Override
