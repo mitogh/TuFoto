@@ -41,7 +41,6 @@ public class ApplyFrames extends ActionBarActivity {
 
         ButterKnife.inject(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayUseLogoEnabled(false);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         Intent intent = getIntent();
