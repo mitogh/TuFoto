@@ -18,7 +18,7 @@ import butterknife.InjectView;
 
 public class Main extends ActionBarActivity implements View.OnClickListener {
 
-    private static final int SELECT_PICTURE = 1;
+    private static final int SELECT_PICTURE = 100;
     public static final String IMAGE_PATH = "IMAGE_PATH";
     private final String EMPTY_STRING = "";
 
@@ -53,11 +53,13 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
     }
 
     private void selecImageFromLibrary() {
-        Intent intent = new Intent(Intent.ACTION_PICK,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Intent intent = new Intent();
         intent.setType("image/*");
-        startActivityForResult(Intent.createChooser(intent,
-                "Select Picture"), SELECT_PICTURE);
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(
+                Intent.createChooser(intent, getString(R.string.label_select_picture_from_library)),
+                SELECT_PICTURE
+        );
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
