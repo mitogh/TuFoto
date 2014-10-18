@@ -111,7 +111,6 @@ public class ApplyFrames extends ActionBarActivity {
 
         /*Bitmap frame = BitmapFactory.decodeResource(getResources(), R.drawable.framew);
         Bitmap result = combineImages(frame, bitmap);*/
-
         return bitmap;
     }
 
