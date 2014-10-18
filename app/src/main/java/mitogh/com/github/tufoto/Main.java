@@ -69,7 +69,8 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
     }
 
     private void openTheCamera(){
-
+        Intent intent = new Intent(this, Camera.class);
+        startActivity(intent);
     }
 
     private void selecImageFromLibrary() {

@@ -9,5 +9,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="message_problem_retrieving_image">There was a problem retrieving the image</string>
     <string name="label_select_picture_from_library">Where is your picture?</string>
+    <string name="title_activity_camera">Camera</string>
 
 </resources>
