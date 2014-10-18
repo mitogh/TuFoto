@@ -40,7 +40,9 @@ public class ApplyFrames extends ActionBarActivity {
         setContentView(R.layout.activity_apply_frames);
 
         ButterKnife.inject(this);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayUseLogoEnabled(false);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         Intent intent = getIntent();
         imagePath = intent.getStringExtra(Main.IMAGE_PATH);

@@ -33,6 +33,8 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
         ButterKnife.inject(this);
 
         takePictureButton.setOnClickListener(this);
