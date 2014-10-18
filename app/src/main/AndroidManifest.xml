@@ -41,7 +41,7 @@
                 android:value=".Main" />
         </activity>
         <activity
-            android:name=".Camera"
+            android:name=".TakePhoto"
             android:label="@string/title_activity_camera"
             android:screenOrientation="portrait">
         </activity>
