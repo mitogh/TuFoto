@@ -2,6 +2,7 @@ package mitogh.com.github.tufoto;
 
 import android.content.Context;
 import android.hardware.Camera;
+import android.os.Build;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -28,7 +29,11 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     }
 
     public void surfaceCreated(SurfaceHolder holder) {
-        // The Surface has been created, now tell the camera where to draw the preview.
+
+        if (Build.VERSION.SDK_INT >= 8){
+            mCamera.setDisplayOrientation(90);
+        }
+
         try {
             mCamera.setPreviewDisplay(holder);
             mCamera.startPreview();
