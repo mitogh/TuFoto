@@ -3,6 +3,7 @@ package mitogh.com.github.tufoto;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
@@ -107,6 +108,10 @@ public class ApplyFrames extends ActionBarActivity {
             }
         } catch (Exception e) {
         }
+
+        /*Bitmap frame = BitmapFactory.decodeResource(getResources(), R.drawable.framew);
+        Bitmap result = combineImages(frame, bitmap);*/
+
         return bitmap;
     }
 
@@ -116,6 +121,30 @@ public class ApplyFrames extends ActionBarActivity {
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }
 
+    public Bitmap combineImages(Bitmap frame, Bitmap image) {
+
+        Bitmap cs = null;
+        Bitmap rs = null;
+
+        rs = Bitmap.createScaledBitmap(frame, image.getWidth(),
+                image.getHeight(), true);
+
+        cs = Bitmap.createBitmap(rs.getWidth(), rs.getHeight(),
+                Bitmap.Config.RGB_565);
+
+        Canvas comboImage = new Canvas(cs);
+
+        comboImage.drawBitmap(image, 0, 0, null);
+        comboImage.drawBitmap(rs, 0, 0, null);
+
+        if (rs != null) {
+            rs.recycle();
+            rs = null;
+        }
+        Runtime.getRuntime().gc();
+
+        return cs;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
