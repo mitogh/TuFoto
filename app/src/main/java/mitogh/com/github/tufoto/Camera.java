@@ -36,6 +36,8 @@ public class Camera extends ActionBarActivity {
         FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
         preview.addView(mPreview);
 
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
         Button captureButton = (Button) findViewById(R.id.button_capture);
         captureButton.setOnClickListener(
                 new View.OnClickListener() {
