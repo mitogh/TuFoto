@@ -2,13 +2,10 @@ package mitogh.com.github.tufoto;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
-import android.media.ExifInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,12 +16,15 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import java.io.File;
+import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 
 public class ApplyFrames extends ActionBarActivity {
+
+    public static final String TAG = ActionBarActivity.class.getSimpleName();
 
     @InjectView(R.id.imageview_show_picture)
     ImageView showPictureImageView;
@@ -78,73 +78,15 @@ public class ApplyFrames extends ActionBarActivity {
         int targetW = showPictureImageView.getWidth();
         int targetH = showPictureImageView.getHeight();
 
-        // Get the dimensions of the bitmap
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(imagePath, bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-        // Determine how much to scale down the image
-        int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
-
-        // Decode the image file into a Bitmap sized to fill the View
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
-
-        Bitmap bitmap = BitmapFactory.decodeFile(imagePath, bmOptions);
+        Bitmap bitmap = ProcessBitmap.resize(imagePath, targetW, targetH);
 
         try {
-            ExifInterface ei = new ExifInterface(imagePath);
-            int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-
-            switch (orientation) {
-                case ExifInterface.ORIENTATION_ROTATE_90:
-                    bitmap = RotateBitmap(bitmap, 90);
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_180:
-                    bitmap = RotateBitmap(bitmap, 180);
-                    break;
-                // etc.
-            }
-        } catch (Exception e) {
+            int orientation = ProcessBitmap.getOrientation(imagePath);
+            bitmap = ProcessBitmap.fixOrientation(bitmap, orientation);
+        } catch (IOException e) {
+            Log.d(TAG, e.getStackTrace().toString());
         }
-
-        /*Bitmap frame = BitmapFactory.decodeResource(getResources(), R.drawable.framew);
-        Bitmap result = combineImages(frame, bitmap);*/
         return bitmap;
-    }
-
-    public static Bitmap RotateBitmap(Bitmap source, float angle){
-        Matrix matrix = new Matrix();
-        matrix.postRotate(angle);
-        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
-    }
-
-    public Bitmap combineImages(Bitmap frame, Bitmap image) {
-
-        Bitmap cs = null;
-        Bitmap rs = null;
-
-        rs = Bitmap.createScaledBitmap(frame, image.getWidth(),
-                image.getHeight(), true);
-
-        cs = Bitmap.createBitmap(rs.getWidth(), rs.getHeight(),
-                Bitmap.Config.RGB_565);
-
-        Canvas comboImage = new Canvas(cs);
-
-        comboImage.drawBitmap(image, 0, 0, null);
-        comboImage.drawBitmap(rs, 0, 0, null);
-
-        if (rs != null) {
-            rs.recycle();
-            rs = null;
-        }
-        Runtime.getRuntime().gc();
-
-        return cs;
     }
 
     @Override
