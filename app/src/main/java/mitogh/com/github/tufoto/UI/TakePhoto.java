@@ -125,26 +125,23 @@ public class TakePhoto extends ActionBarActivity {
     }
 
     public static Camera getCameraInstance() {
-        Camera c = null;
+        Camera camera = null;
         try {
-            c = Camera.open();
+            camera = Camera.open();
         } catch (Exception e) {
+            Log.d(TAG, e.getStackTrace().toString());
         }
-        return c; // returns null if camera is unavailable
+        return camera;
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.camera, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case android.R.id.home:
                 this.finish();
