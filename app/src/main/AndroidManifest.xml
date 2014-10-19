@@ -2,15 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="mitogh.com.github.tufoto" >
 
-    <uses-permission
-        android:name="android.permission.CAMERA"
-        android:required="false" />
-
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="false" />
+    <!-- Camera Permission and features -->
+    <uses-permission android:name="android.permission.CAMERA" android:required="false" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.front" android:required="false" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
+    <!-- Read and Write Permission from the External Storage -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
