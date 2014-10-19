@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -21,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import mitogh.com.github.tufoto.Camera.Preview;
+import mitogh.com.github.tufoto.File.Directory;
 import mitogh.com.github.tufoto.R;
 
 public class TakePhoto extends ActionBarActivity {
@@ -82,6 +82,7 @@ public class TakePhoto extends ActionBarActivity {
                 fos.write(data);
                 fos.close();
 
+                releaseCamera();
                 startFrames(Uri.fromFile(pictureFile).getPath());
             } catch (FileNotFoundException e) {
                 Log.d(TAG, "File not found: " + e.getMessage());
@@ -92,9 +93,8 @@ public class TakePhoto extends ActionBarActivity {
     };
 
     private void startFrames(String imagePath){
-        releaseCamera();
         Intent intent = new Intent(this, ApplyFrames.class);
-        intent.putExtra(Main.IMAGE_PATH, imagePath);
+        intent.putExtra(ApplyFrames.IMAGE_PATH, imagePath);
         startActivity(intent);
     }
 
@@ -102,20 +102,12 @@ public class TakePhoto extends ActionBarActivity {
 
     private static File getOutputMediaFile(int type) {
 
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), "MyCameraApp");
-
-        if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
-                Log.d("MyCameraApp", "failed to create directory");
-                return null;
-            }
-        }
+        Directory.create();
 
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         File mediaFile;
         if (type == MEDIA_TYPE_IMAGE) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
+            mediaFile = new File(Directory.NAME.getPath() + File.separator +
                     "IMG_" + timeStamp + ".jpg");
         } else {
             return null;

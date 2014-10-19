@@ -22,7 +22,6 @@ import mitogh.com.github.tufoto.R;
 public class Main extends ActionBarActivity implements View.OnClickListener {
 
     private static final int SELECT_PICTURE = 100;
-    public static final String IMAGE_PATH = "IMAGE_PATH";
     private final String EMPTY_STRING = "";
 
     @InjectView(R.id.button_select_picture)
@@ -97,7 +96,7 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
                     .show();
         }else{
             Intent intent = new Intent(this, ApplyFrames.class);
-            intent.putExtra(IMAGE_PATH, selectedImagePath);
+            intent.putExtra(ApplyFrames.IMAGE_PATH, selectedImagePath);
             startActivity(intent);
         }
     }

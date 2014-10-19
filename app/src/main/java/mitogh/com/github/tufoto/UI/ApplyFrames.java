@@ -27,6 +27,7 @@ import mitogh.com.github.tufoto.R;
 public class ApplyFrames extends ActionBarActivity {
 
     public static final String TAG = ActionBarActivity.class.getSimpleName();
+    public static final String IMAGE_PATH = "IMAGE_PATH";
 
     @InjectView(R.id.imageview_show_picture)
     ImageView showPictureImageView;
@@ -46,7 +47,7 @@ public class ApplyFrames extends ActionBarActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         Intent intent = getIntent();
-        imagePath = intent.getStringExtra(Main.IMAGE_PATH);
+        imagePath = intent.getStringExtra(ApplyFrames.IMAGE_PATH);
 
         Picasso.with(
                 getApplicationContext()
