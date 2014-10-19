@@ -29,8 +29,8 @@ public class ApplyFrames extends ActionBarActivity {
     public static final String TAG = ActionBarActivity.class.getSimpleName();
     public static final String IMAGE_PATH = "IMAGE_PATH";
 
-    @InjectView(R.id.imageview_show_picture)
-    ImageView showPictureImageView;
+    @InjectView(R.id.imageview_display_photo)
+    ImageView displayPhotoImageView;
 
     @InjectView(R.id.progressbar_image_loading)
     ProgressBar imageLoadingProgressBar;
@@ -66,7 +66,7 @@ public class ApplyFrames extends ActionBarActivity {
 
         @Override
         public void onBitmapLoaded(Bitmap photo, Picasso.LoadedFrom from) {
-            showPictureImageView.setImageBitmap(
+            displayPhotoImageView.setImageBitmap(
                     loadImage()
             );
             imageLoadingProgressBar.setVisibility(View.INVISIBLE);
@@ -78,8 +78,8 @@ public class ApplyFrames extends ActionBarActivity {
     };
 
     public Bitmap loadImage() {
-        int targetW = showPictureImageView.getWidth();
-        int targetH = showPictureImageView.getHeight();
+        int targetW = displayPhotoImageView.getWidth();
+        int targetH = displayPhotoImageView.getHeight();
 
         Bitmap bitmap = Processing.resize(imagePath, targetW, targetH);
 

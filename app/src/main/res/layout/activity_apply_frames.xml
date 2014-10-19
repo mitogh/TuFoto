@@ -17,7 +17,7 @@
         android:layout_centerVertical="true" />
 
     <ImageView
-        android:id="@+id/imageview_show_picture"
+        android:id="@+id/imageview_display_photo"
         android:layout_width="700dp"
         android:layout_height="700dp"
         android:layout_alignParentTop="true"

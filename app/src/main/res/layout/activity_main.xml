@@ -17,20 +17,20 @@
         android:gravity="center_horizontal" >
 
     <Button
-        android:id="@+id/button_take_picture"
+        android:id="@+id/button_open_camera"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:text="@string/button_take_picture_label"/>
+        android:text="@string/button_take_photo_label"/>
 
         <Button
-            android:id="@+id/button_select_picture"
+            android:id="@+id/button_select_photo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:text="@string/button_select_picture_label"/>
+            android:text="@string/button_select_photo_label"/>
 
     </RelativeLayout>
 </RelativeLayout>

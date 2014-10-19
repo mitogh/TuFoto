@@ -20,13 +20,13 @@ import mitogh.com.github.tufoto.R;
 
 public class Main extends ActionBarActivity implements View.OnClickListener {
 
-    private static final int SELECT_PICTURE = 100;
+    private static final int SELECT_PHOTO = 100;
     private final String EMPTY_STRING = "";
 
-    @InjectView(R.id.button_select_picture)
-    Button selectPictureButton;
-    @InjectView(R.id.button_take_picture)
-    Button takePictureButton;
+    @InjectView(R.id.button_select_photo)
+    Button selectPhotoButton;
+    @InjectView(R.id.button_open_camera)
+    Button takePhotoButton;
 
 
     @Override
@@ -40,24 +40,24 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
 
         disableTakePhotoButtonIf(!CameraHardware.exits(this));
 
-        takePictureButton.setOnClickListener(this);
-        selectPictureButton.setOnClickListener(this);
+        takePhotoButton.setOnClickListener(this);
+        selectPhotoButton.setOnClickListener(this);
     }
 
     private void disableTakePhotoButtonIf(Boolean condition) {
         if(condition){
-            takePictureButton.setVisibility(View.INVISIBLE);
+            takePhotoButton.setVisibility(View.INVISIBLE);
         }
     }
 
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
-            case R.id.button_take_picture:
+            case R.id.button_open_camera:
                 openTheCamera();
                 break;
 
-            case R.id.button_select_picture:
+            case R.id.button_select_photo:
                 selecImageFromLibrary();
                 break;
         }
@@ -73,15 +73,15 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(
-                Intent.createChooser(intent, getString(R.string.label_select_picture_from_library)),
-                SELECT_PICTURE
+                Intent.createChooser(intent, getString(R.string.label_select_photo_from_library)),
+                SELECT_PHOTO
         );
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         String selectedImagePath = "";
 
-        if (resultCode == RESULT_OK && requestCode == SELECT_PICTURE) {
+        if (resultCode == RESULT_OK && requestCode == SELECT_PHOTO) {
             Uri selectedImageUri = data.getData();
             selectedImagePath = getPath(selectedImageUri);
         }
