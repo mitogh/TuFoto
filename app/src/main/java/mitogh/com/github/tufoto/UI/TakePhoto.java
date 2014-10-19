@@ -31,8 +31,8 @@ public class TakePhoto extends ActionBarActivity {
 
     private static final String TAG = ActionBarActivity.class.getSimpleName();
 
-    @InjectView(R.id.camera_preview) private FrameLayout preview;
-    @InjectView(R.id.button_capture) private Button captureButton;
+    @InjectView(R.id.camera_preview) protected FrameLayout preview;
+    @InjectView(R.id.button_capture) protected Button captureButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

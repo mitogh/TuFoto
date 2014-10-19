@@ -38,12 +38,16 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
 
         ButterKnife.inject(this);
 
-        if(CameraHardware.exits(this)){
-            takePictureButton.setVisibility(View.INVISIBLE);
-        }
+        disableTakePhotoButtonIf(!CameraHardware.exits(this));
 
         takePictureButton.setOnClickListener(this);
         selectPictureButton.setOnClickListener(this);
+    }
+
+    private void disableTakePhotoButtonIf(Boolean condition) {
+        if(condition){
+            takePictureButton.setVisibility(View.INVISIBLE);
+        }
     }
 
     public void onClick(View v) {
