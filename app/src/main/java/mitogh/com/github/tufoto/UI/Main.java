@@ -1,8 +1,6 @@
 package mitogh.com.github.tufoto.UI;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,6 +14,7 @@ import android.widget.Toast;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import mitogh.com.github.tufoto.Camera.CameraHardware;
 import mitogh.com.github.tufoto.R;
 
 
@@ -39,20 +38,12 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
 
         ButterKnife.inject(this);
 
-        if(checkCameraHardware(this) == false){
+        if(CameraHardware.exits(this)){
             takePictureButton.setVisibility(View.INVISIBLE);
         }
 
         takePictureButton.setOnClickListener(this);
         selectPictureButton.setOnClickListener(this);
-    }
-
-    private boolean checkCameraHardware(Context context) {
-        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)){
-            return true;
-        } else {
-            return false;
-        }
     }
 
     public void onClick(View v) {
