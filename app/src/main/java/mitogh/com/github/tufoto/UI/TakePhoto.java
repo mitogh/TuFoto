@@ -17,6 +17,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import mitogh.com.github.tufoto.Camera.Preview;
 import mitogh.com.github.tufoto.File.Directory;
 import mitogh.com.github.tufoto.File.FileName;
@@ -29,24 +31,26 @@ public class TakePhoto extends ActionBarActivity {
 
     private static final String TAG = ActionBarActivity.class.getSimpleName();
 
+    @InjectView(R.id.camera_preview) private FrameLayout preview;
+    @InjectView(R.id.button_capture) private Button captureButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_take_photo);
 
+        ButterKnife.inject(this);
+
         mCamera = getCameraInstance();
         mPreview = new Preview(this, mCamera);
-        FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
         preview.addView(mPreview);
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        Button captureButton = (Button) findViewById(R.id.button_capture);
         captureButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // get an image from the camera
                         mCamera.takePicture(null, null, mPicture);
                     }
                 }
