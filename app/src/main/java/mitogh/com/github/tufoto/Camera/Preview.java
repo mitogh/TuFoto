@@ -1,4 +1,4 @@
-package mitogh.com.github.tufoto;
+package mitogh.com.github.tufoto.Camera;
 
 import android.content.Context;
 import android.hardware.Camera;
@@ -9,14 +9,14 @@ import android.view.SurfaceView;
 
 import java.io.IOException;
 
-public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
+public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 
     private SurfaceHolder mHolder;
     private Camera mCamera;
 
-    private static String TAG = CameraPreview.class.getSimpleName();
+    private static String TAG = Preview.class.getSimpleName();
 
-    public CameraPreview(Context context, Camera camera) {
+    public Preview(Context context, Camera camera) {
         super(context);
         mCamera = camera;
 

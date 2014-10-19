@@ -1,4 +1,4 @@
-package mitogh.com.github.tufoto;
+package mitogh.com.github.tufoto.Bitmap;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,7 +8,7 @@ import android.media.ExifInterface;
 
 import java.io.IOException;
 
-public class ProcessBitmap {
+public class Processing {
 
     public static int getOrientation(String imagePath) throws IOException {
         ExifInterface ei = new ExifInterface(imagePath);
@@ -21,10 +21,10 @@ public class ProcessBitmap {
         Bitmap bitmap;
         switch (orientation) {
             case ExifInterface.ORIENTATION_ROTATE_90:
-                bitmap = ProcessBitmap.rotate(source, 90);
+                bitmap = Processing.rotate(source, 90);
                 break;
             case ExifInterface.ORIENTATION_ROTATE_180:
-                bitmap = ProcessBitmap.rotate(source, 180);
+                bitmap = Processing.rotate(source, 180);
                 break;
 
             default:

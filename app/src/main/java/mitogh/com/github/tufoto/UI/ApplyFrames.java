@@ -1,4 +1,4 @@
-package mitogh.com.github.tufoto;
+package mitogh.com.github.tufoto.UI;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -20,6 +20,8 @@ import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import mitogh.com.github.tufoto.Bitmap.Processing;
+import mitogh.com.github.tufoto.R;
 
 
 public class ApplyFrames extends ActionBarActivity {
@@ -78,11 +80,11 @@ public class ApplyFrames extends ActionBarActivity {
         int targetW = showPictureImageView.getWidth();
         int targetH = showPictureImageView.getHeight();
 
-        Bitmap bitmap = ProcessBitmap.resize(imagePath, targetW, targetH);
+        Bitmap bitmap = Processing.resize(imagePath, targetW, targetH);
 
         try {
-            int orientation = ProcessBitmap.getOrientation(imagePath);
-            bitmap = ProcessBitmap.fixOrientation(bitmap, orientation);
+            int orientation = Processing.getOrientation(imagePath);
+            bitmap = Processing.fixOrientation(bitmap, orientation);
         } catch (IOException e) {
             Log.d(TAG, e.getStackTrace().toString());
         }

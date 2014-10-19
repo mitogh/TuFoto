@@ -1,4 +1,4 @@
-package mitogh.com.github.tufoto;
+package mitogh.com.github.tufoto.UI;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import mitogh.com.github.tufoto.R;
 
 
 public class Main extends ActionBarActivity implements View.OnClickListener {
