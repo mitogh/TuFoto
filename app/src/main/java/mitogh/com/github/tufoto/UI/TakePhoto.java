@@ -16,11 +16,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import mitogh.com.github.tufoto.Camera.Preview;
 import mitogh.com.github.tufoto.File.Directory;
+import mitogh.com.github.tufoto.File.FileName;
 import mitogh.com.github.tufoto.R;
 
 public class TakePhoto extends ActionBarActivity {
@@ -71,8 +70,8 @@ public class TakePhoto extends ActionBarActivity {
 
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
-            File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
-            if (pictureFile == null){
+            File pictureFile = getOutputMediaFile();
+            if (pictureFile == null) {
                 Log.d(TAG, "Error creating media file, check storage permissions: ");
                 return;
             }
@@ -92,28 +91,15 @@ public class TakePhoto extends ActionBarActivity {
         }
     };
 
-    private void startFrames(String imagePath){
+    private void startFrames(String imagePath) {
         Intent intent = new Intent(this, ApplyFrames.class);
         intent.putExtra(ApplyFrames.IMAGE_PATH, imagePath);
         startActivity(intent);
     }
 
-    public static final int MEDIA_TYPE_IMAGE = 1;
-
-    private static File getOutputMediaFile(int type) {
-
+    private static File getOutputMediaFile() {
         Directory.create();
-
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        File mediaFile;
-        if (type == MEDIA_TYPE_IMAGE) {
-            mediaFile = new File(Directory.NAME.getPath() + File.separator +
-                    "IMG_" + timeStamp + ".jpg");
-        } else {
-            return null;
-        }
-
-        return mediaFile;
+        return FileName.create(Directory.NAME.getPath());
     }
 
     public static Camera getCameraInstance() {
