@@ -19,6 +19,7 @@ import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import mitogh.com.github.tufoto.Camera.CameraHardware;
 import mitogh.com.github.tufoto.Camera.CameraPreview;
 import mitogh.com.github.tufoto.File.Directory;
 import mitogh.com.github.tufoto.File.FileName;
@@ -28,6 +29,7 @@ public class TakePhoto extends ActionBarActivity {
 
     private Camera mCamera;
     private CameraPreview mPreview;
+    private String directoryPath;
 
     private static final String TAG = ActionBarActivity.class.getSimpleName();
 
@@ -41,7 +43,7 @@ public class TakePhoto extends ActionBarActivity {
 
         ButterKnife.inject(this);
 
-        mCamera = getCameraInstance();
+        mCamera = new CameraHardware().getCamera();
         mPreview = new CameraPreview(this, mCamera);
         preview.addView(mPreview);
 
@@ -55,37 +57,28 @@ public class TakePhoto extends ActionBarActivity {
                     }
                 }
         );
+
+        Directory.create();
+        directoryPath = Directory.NAME.getPath();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        releaseCamera();
-    }
-
-    private void releaseCamera() {
-        if (mCamera != null) {
-            mCamera.release();
-            mCamera = null;
-        }
+        mCamera.release();
     }
 
     private Camera.PictureCallback mPicture = new Camera.PictureCallback() {
 
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
-            File pictureFile = getOutputMediaFile();
-            if (pictureFile == null) {
-                Log.d(TAG, "Error creating media file, check storage permissions: ");
-                return;
-            }
+            File pictureFile = FileName.create(directoryPath);
 
             try {
                 FileOutputStream fos = new FileOutputStream(pictureFile);
                 fos.write(data);
                 fos.close();
-
-                releaseCamera();
+                mCamera.release();
                 startFrames(Uri.fromFile(pictureFile).getPath());
             } catch (FileNotFoundException e) {
                 Log.d(TAG, "File not found: " + e.getMessage());
@@ -99,21 +92,6 @@ public class TakePhoto extends ActionBarActivity {
         Intent intent = new Intent(this, ApplyFrames.class);
         intent.putExtra(ApplyFrames.IMAGE_PATH, imagePath);
         startActivity(intent);
-    }
-
-    private static File getOutputMediaFile() {
-        Directory.create();
-        return FileName.create(Directory.NAME.getPath());
-    }
-
-    public static Camera getCameraInstance() {
-        Camera camera = null;
-        try {
-            camera = Camera.open();
-        } catch (Exception e) {
-            Log.d(TAG, e.getStackTrace().toString());
-        }
-        return camera;
     }
 
     @Override
