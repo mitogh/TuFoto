@@ -71,7 +71,6 @@ public class TakePhoto extends ActionBarActivity {
     }
 
     private Camera.PictureCallback mPicture = new Camera.PictureCallback() {
-
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
             File pictureFile = FileName.create(directoryPath);

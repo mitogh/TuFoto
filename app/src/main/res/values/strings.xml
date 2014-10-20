@@ -9,5 +9,6 @@
     <string name="message_problem_retrieving_image">There was a problem retrieving the photo</string>
     <string name="label_select_photo_from_library">Where is your photo?</string>
     <string name="title_activity_camera">Camera</string>
+    <string name="change_camera_icon">Change Camera</string>
 
 </resources>
