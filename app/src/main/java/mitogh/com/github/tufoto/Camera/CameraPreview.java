@@ -9,14 +9,14 @@ import android.view.SurfaceView;
 
 import java.io.IOException;
 
-public class Preview extends SurfaceView implements SurfaceHolder.Callback {
+public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
 
     private SurfaceHolder mHolder;
     private Camera mCamera;
 
-    private static String TAG = Preview.class.getSimpleName();
+    private static String TAG = CameraPreview.class.getSimpleName();
 
-    public Preview(Context context, Camera camera) {
+    public CameraPreview(Context context, Camera camera) {
         super(context);
         mCamera = camera;
 
@@ -47,16 +47,14 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
         try {
             mCamera.stopPreview();
         }catch(Exception e){
-
+            Log.d(TAG, e.getStackTrace().toString());
         }
     }
 
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
-        // If your preview can change or rotate, take care of those events here.
-        // Make sure to stop the preview before resizing or reformatting it.
 
+        // preview surface does not exist
         if (mHolder.getSurface() == null) {
-            // preview surface does not exist
             return;
         }
 
@@ -64,17 +62,13 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
         try {
             mCamera.stopPreview();
         } catch (Exception e) {
-            // ignore: tried to stop a non-existent preview
+            Log.d(TAG, e.getStackTrace().toString());
         }
-
-        // set preview size and make any resize, rotate or
-        // reformatting changes here
 
         // start preview with new settings
         try {
             mCamera.setPreviewDisplay(mHolder);
             mCamera.startPreview();
-
         } catch (Exception e) {
             Log.d(TAG, "Error starting camera preview: " + e.getMessage());
         }

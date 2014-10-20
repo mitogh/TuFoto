@@ -19,7 +19,7 @@ import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import mitogh.com.github.tufoto.Camera.Preview;
+import mitogh.com.github.tufoto.Camera.CameraPreview;
 import mitogh.com.github.tufoto.File.Directory;
 import mitogh.com.github.tufoto.File.FileName;
 import mitogh.com.github.tufoto.R;
@@ -27,7 +27,7 @@ import mitogh.com.github.tufoto.R;
 public class TakePhoto extends ActionBarActivity {
 
     private Camera mCamera;
-    private Preview mPreview;
+    private CameraPreview mPreview;
 
     private static final String TAG = ActionBarActivity.class.getSimpleName();
 
@@ -42,7 +42,7 @@ public class TakePhoto extends ActionBarActivity {
         ButterKnife.inject(this);
 
         mCamera = getCameraInstance();
-        mPreview = new Preview(this, mCamera);
+        mPreview = new CameraPreview(this, mCamera);
         preview.addView(mPreview);
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
