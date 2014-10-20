@@ -53,7 +53,12 @@ public class Processing {
         int photoH = bitmapOptions.outHeight;
 
         // Determine how much to scale down the image
-        int scaleFactor = Math.min(photoW / width, photoH / height);
+        int scaleFactor;
+        try {
+            scaleFactor = Math.min(photoW / width, photoH / height);
+        } catch( ArithmeticException e){
+            scaleFactor = 1;
+        }
 
         // Decode the image file into a Bitmap sized to fill the View
         bitmapOptions.inJustDecodeBounds = false;
