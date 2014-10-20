@@ -43,6 +43,7 @@ public class TakePhoto extends ActionBarActivity {
         setContentView(R.layout.activity_take_photo);
 
         ButterKnife.inject(this);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         captureButton.setOnClickListener(
@@ -81,6 +82,7 @@ public class TakePhoto extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                this.finish();
                 return true;
             case R.id.action_change_camera:
                 changeCamera();
