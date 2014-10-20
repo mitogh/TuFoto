@@ -17,17 +17,13 @@ import butterknife.InjectView;
 import mitogh.com.github.tufoto.Camera.CameraHardware;
 import mitogh.com.github.tufoto.R;
 
-
 public class Main extends ActionBarActivity implements View.OnClickListener {
 
     private static final int SELECT_PHOTO = 100;
     private final String EMPTY_STRING = "";
 
-    @InjectView(R.id.button_select_photo)
-    Button selectPhotoButton;
-    @InjectView(R.id.button_open_camera)
-    Button takePhotoButton;
-
+    @InjectView(R.id.button_select_photo) Button selectPhotoButton;
+    @InjectView(R.id.button_open_camera) Button takePhotoButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +38,32 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
 
         takePhotoButton.setOnClickListener(this);
         selectPhotoButton.setOnClickListener(this);
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+    }
+
+    private void openTheCamera() {
+        startActivity(
+            new Intent(this, TakePhoto.class)
+        );
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void disableTakePhotoButtonIf(Boolean condition) {
@@ -62,18 +84,6 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
                 break;
         }
     }
-
-    @Override
-    protected void onPause(){
-        super.onPause();
-    }
-
-    private void openTheCamera() {
-        startActivity(
-            new Intent(this, TakePhoto.class)
-        );
-    }
-
     private void selecImageFromLibrary() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -119,20 +129,5 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
         }
 
         return uri.getPath();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }

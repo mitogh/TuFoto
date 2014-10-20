@@ -71,31 +71,6 @@ public class TakePhoto extends ActionBarActivity {
         loadCamera();
     }
 
-    private Camera.PictureCallback mPicture = new Camera.PictureCallback() {
-        @Override
-        public void onPictureTaken(byte[] data, Camera camera) {
-            File pictureFile = FileName.create(directoryPath);
-
-            try {
-                FileOutputStream fos = new FileOutputStream(pictureFile);
-                fos.write(data);
-                fos.close();
-                mCamera.release();
-                startFrames(Uri.fromFile(pictureFile).getPath());
-            } catch (FileNotFoundException e) {
-                Log.d(TAG, "File not found: " + e.getMessage());
-            } catch (IOException e) {
-                Log.d(TAG, "Error accessing file: " + e.getMessage());
-            }
-        }
-    };
-
-    private void startFrames(String imagePath) {
-        Intent intent = new Intent(this, ApplyFrames.class);
-        intent.putExtra(ApplyFrames.IMAGE_PATH, imagePath);
-        startActivity(intent);
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.camera, menu);
@@ -109,6 +84,7 @@ public class TakePhoto extends ActionBarActivity {
                 return true;
             case R.id.action_change_camera:
                 changeCamera();
+                loadCamera();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -117,7 +93,6 @@ public class TakePhoto extends ActionBarActivity {
 
     private void changeCamera(){
         cameraNumber = (cameraNumber + 1 ) % 2;
-        loadCamera();
     }
 
     private void loadCamera(){
@@ -154,4 +129,28 @@ public class TakePhoto extends ActionBarActivity {
         preview.addView(mPreview);
     }
 
+    private Camera.PictureCallback mPicture = new Camera.PictureCallback() {
+        @Override
+        public void onPictureTaken(byte[] data, Camera camera) {
+            File pictureFile = FileName.create(directoryPath);
+
+            try {
+                FileOutputStream fos = new FileOutputStream(pictureFile);
+                fos.write(data);
+                fos.close();
+                mCamera.release();
+                startFrames(Uri.fromFile(pictureFile).getPath());
+            } catch (FileNotFoundException e) {
+                Log.d(TAG, "File not found: " + e.getMessage());
+            } catch (IOException e) {
+                Log.d(TAG, "Error accessing file: " + e.getMessage());
+            }
+        }
+    };
+
+    private void startFrames(String imagePath) {
+        Intent intent = new Intent(this, ApplyFrames.class);
+        intent.putExtra(ApplyFrames.IMAGE_PATH, imagePath);
+        startActivity(intent);
+    }
 }
