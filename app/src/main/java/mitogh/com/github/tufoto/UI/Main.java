@@ -5,7 +5,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,7 +17,7 @@ import butterknife.InjectView;
 import mitogh.com.github.tufoto.Camera.CameraHardware;
 import mitogh.com.github.tufoto.R;
 
-public class Main extends FragmentActivity implements View.OnClickListener {
+public class Main extends ActionBarActivity implements View.OnClickListener {
 
     private static final int SELECT_PHOTO = 100;
     private final String EMPTY_STRING = "";
@@ -29,6 +29,8 @@ public class Main extends FragmentActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        getSupportActionBar().hide();
 
         ButterKnife.inject(this);
 

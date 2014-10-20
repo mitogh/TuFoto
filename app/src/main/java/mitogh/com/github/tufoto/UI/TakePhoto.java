@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -45,6 +46,8 @@ public class TakePhoto extends ActionBarActivity {
         ButterKnife.inject(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.icon_remove);
+
 
         captureButton.setOnClickListener(
                 new View.OnClickListener() {
@@ -62,7 +65,6 @@ public class TakePhoto extends ActionBarActivity {
     @Override
     protected void onPause() {
         super.onPause();
-
         releaseCamera();
     }
 
@@ -74,8 +76,10 @@ public class TakePhoto extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.camera, menu);
-        return true;
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.camera, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
