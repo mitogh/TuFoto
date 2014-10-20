@@ -46,6 +46,8 @@ public class CameraHardware {
             if(!isCameraOpen) {
                 camera = Camera.open(FRONTAL_CAMERA);
                 isCameraOpen = true;
+            }else{
+                closeCamera();
             }
         } catch (Exception e) {
             Log.d(TAG, e.getStackTrace().toString());
@@ -57,17 +59,24 @@ public class CameraHardware {
             if(!isCameraOpen) {
                 camera = Camera.open(BACK_CAMERA);
                 isCameraOpen = true;
+            }else{
+                closeCamera();
             }
         } catch (Exception e) {
             Log.d(TAG, e.getStackTrace().toString());
         }
     }
 
+    private void closeCamera() {
+        camera = null;
+        isCameraOpen = false;
+        relase();
+    }
+
     public Camera relase(){
         if (camera != null) {
             camera.release();
         }
-
         return null;
     }
 

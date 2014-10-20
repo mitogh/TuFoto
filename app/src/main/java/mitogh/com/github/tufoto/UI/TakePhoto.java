@@ -30,8 +30,9 @@ public class TakePhoto extends ActionBarActivity {
     private Camera mCamera;
     private CameraPreview mPreview;
     private String directoryPath;
-
+    private static int cameraNumber;
     private static final String TAG = ActionBarActivity.class.getSimpleName();
+    private CameraHardware cameraHardware;
 
     @InjectView(R.id.camera_preview) protected FrameLayout preview;
     @InjectView(R.id.button_capture) protected Button captureButton;
@@ -42,9 +43,9 @@ public class TakePhoto extends ActionBarActivity {
         setContentView(R.layout.activity_take_photo);
 
         ButterKnife.inject(this);
-        CameraHardware cameraHardware = new CameraHardware();
-        cameraHardware.openFrontalCamera();
-        mCamera = cameraHardware.getCamera();
+        cameraHardware = new CameraHardware();
+        cameraNumber = getIntent().getIntExtra("CAMERA_NUMBER", 1);
+        loadCamera();
 
         mPreview = new CameraPreview(this, mCamera);
         preview.addView(mPreview);
@@ -107,8 +108,29 @@ public class TakePhoto extends ActionBarActivity {
             case android.R.id.home:
                 this.finish();
                 return true;
+            case R.id.action_change_camera:
+                changeCamera();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void loadCamera(){
+
+        if(cameraNumber == 1){
+            cameraHardware.openBackCamera();
+            mCamera = cameraHardware.getCamera();
+        }else{
+            cameraHardware.openFrontalCamera();
+            mCamera = cameraHardware.getCamera();
+        }
+    }
+
+    private void changeCamera(){
+        this.finish();
+        Intent intent = new Intent(this, TakePhoto.class);
+        intent.putExtra("CAMERA_NUMBER", (cameraNumber + 1 ) % 2);
+        startActivity(intent);
     }
 }

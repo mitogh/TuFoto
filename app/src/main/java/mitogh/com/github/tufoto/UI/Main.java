@@ -65,6 +65,7 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
 
     private void openTheCamera(){
         Intent intent = new Intent(this, TakePhoto.class);
+        intent.putExtra("CAMERA_NUMBER", 1);
         startActivity(intent);
     }
 
