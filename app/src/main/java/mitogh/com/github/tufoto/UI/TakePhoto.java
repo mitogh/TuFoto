@@ -42,8 +42,10 @@ public class TakePhoto extends ActionBarActivity {
         setContentView(R.layout.activity_take_photo);
 
         ButterKnife.inject(this);
+        CameraHardware cameraHardware = new CameraHardware();
+        cameraHardware.openFrontalCamera();
+        mCamera = cameraHardware.getCamera();
 
-        mCamera = new CameraHardware().getCamera();
         mPreview = new CameraPreview(this, mCamera);
         preview.addView(mPreview);
 
