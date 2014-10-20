@@ -27,7 +27,7 @@ import mitogh.com.github.tufoto.R;
 
 public class TakePhoto extends ActionBarActivity {
 
-    private Camera mCamera;
+    private Camera mCamera = null;
     private CameraPreview mPreview;
     private String directoryPath;
     private static int cameraNumber = 1;
@@ -43,8 +43,6 @@ public class TakePhoto extends ActionBarActivity {
         setContentView(R.layout.activity_take_photo);
 
         ButterKnife.inject(this);
-        cameraHardware = new CameraHardware();
-        loadCamera();
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         captureButton.setOnClickListener(
@@ -55,7 +53,7 @@ public class TakePhoto extends ActionBarActivity {
                     }
                 }
         );
-
+        cameraHardware = new CameraHardware();
         Directory.create();
         directoryPath = Directory.NAME.getPath();
     }
@@ -63,7 +61,16 @@ public class TakePhoto extends ActionBarActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        
+
+        if(mCamera != null){
+            mCamera.release();
+        }
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        loadCamera();
     }
 
     private Camera.PictureCallback mPicture = new Camera.PictureCallback() {
@@ -101,7 +108,6 @@ public class TakePhoto extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                this.finish();
                 return true;
             case R.id.action_change_camera:
                 changeCamera();
@@ -112,22 +118,23 @@ public class TakePhoto extends ActionBarActivity {
     }
 
     private void loadCamera(){
-
         if(mCamera != null){
             mCamera.release();
             preview.removeView(mPreview);
         }
 
         if(cameraNumber == 1){
-            cameraHardware.openBackCamera();
-            mCamera = cameraHardware.getCamera();
+            mCamera = cameraHardware.openBackCamera();
         }else{
-            cameraHardware.openFrontalCamera();
-            mCamera = cameraHardware.getCamera();
+            mCamera = cameraHardware.openFrontalCamera();
         }
 
-        mPreview = new CameraPreview(this, mCamera);
-        preview.addView(mPreview);
+        try {
+            mPreview = new CameraPreview(this, mCamera);
+            preview.addView(mPreview);
+        } catch (Exception e){
+            Log.d(TAG, e.getMessage());
+        }
     }
 
     private void changeCamera(){

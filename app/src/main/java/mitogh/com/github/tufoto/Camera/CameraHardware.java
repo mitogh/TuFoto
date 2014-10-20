@@ -7,21 +7,17 @@ import android.util.Log;
 
 public class CameraHardware {
 
-    private Camera camera = null;
     private static final String TAG = CameraHardware.class.getSimpleName();
 
     private static Integer BACK_CAMERA = null;
     private static Integer FRONTAL_CAMERA = null;
 
-    private Boolean isCameraOpen = false;
-
     public CameraHardware() {
         searchCameras();
     }
 
-    private Camera searchCameras() {
+    private void searchCameras() {
         int cameraCount = 0;
-        Camera cam = null;
         Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
         cameraCount = Camera.getNumberOfCameras();
 
@@ -38,50 +34,24 @@ public class CameraHardware {
                     break;
             }
         }
-        return cam;
     }
 
-    public void openFrontalCamera() {
+    public Camera openFrontalCamera() {
         try {
-            if(!isCameraOpen) {
-                isCameraOpen = true;
-            }else{
-                closeCamera();
-            }
-            camera = Camera.open(FRONTAL_CAMERA);
+            return Camera.open(FRONTAL_CAMERA);
         } catch (Exception e) {
             Log.d(TAG, e.getStackTrace().toString());
+            return null;
         }
     }
 
-    public void openBackCamera() {
+    public Camera openBackCamera() {
         try {
-            if(!isCameraOpen) {
-                isCameraOpen = true;
-            }else{
-                closeCamera();
-            }
-            camera = Camera.open(BACK_CAMERA);
+            return Camera.open(BACK_CAMERA);
         } catch (Exception e) {
             Log.d(TAG, e.getStackTrace().toString());
+            return null;
         }
-    }
-
-    private void closeCamera() {
-        camera = null;
-        isCameraOpen = false;
-        relase();
-    }
-
-    public Camera relase(){
-        if (camera != null) {
-            camera.release();
-        }
-        return null;
-    }
-
-    public Camera getCamera() {
-        return camera;
     }
 
     public static boolean exits(Context context) {

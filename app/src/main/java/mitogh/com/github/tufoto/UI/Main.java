@@ -63,6 +63,11 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
         }
     }
 
+    @Override
+    protected void onPause(){
+        super.onPause();
+    }
+
     private void openTheCamera() {
         startActivity(
             new Intent(this, TakePhoto.class)
