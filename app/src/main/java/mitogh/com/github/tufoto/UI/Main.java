@@ -45,7 +45,7 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
     }
 
     private void disableTakePhotoButtonIf(Boolean condition) {
-        if(condition){
+        if (condition) {
             takePhotoButton.setVisibility(View.INVISIBLE);
         }
     }
@@ -63,10 +63,10 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
         }
     }
 
-    private void openTheCamera(){
-        Intent intent = new Intent(this, TakePhoto.class);
-        intent.putExtra("CAMERA_NUMBER", 1);
-        startActivity(intent);
+    private void openTheCamera() {
+        startActivity(
+            new Intent(this, TakePhoto.class)
+        );
     }
 
     private void selecImageFromLibrary() {
@@ -87,10 +87,10 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
             selectedImagePath = getPath(selectedImageUri);
         }
 
-        if(selectedImagePath.equals(EMPTY_STRING)){
+        if (selectedImagePath.equals(EMPTY_STRING)) {
             Toast.makeText(this, getString(R.string.message_problem_retrieving_image), Toast.LENGTH_LONG)
                     .show();
-        }else{
+        } else {
             Intent intent = new Intent(this, ApplyFrames.class);
             intent.putExtra(ApplyFrames.IMAGE_PATH, selectedImagePath);
             startActivity(intent);
@@ -99,14 +99,14 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
 
     public String getPath(Uri uri) {
 
-        if( uri == null ) {
+        if (uri == null) {
             return EMPTY_STRING;
         }
 
-        String[] projection = { MediaStore.Images.Media.DATA };
+        String[] projection = {MediaStore.Images.Media.DATA};
         Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
 
-        if( cursor != null ){
+        if (cursor != null) {
             int column_index = cursor
                     .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();

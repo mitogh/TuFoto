@@ -30,7 +30,7 @@ public class TakePhoto extends ActionBarActivity {
     private Camera mCamera;
     private CameraPreview mPreview;
     private String directoryPath;
-    private static int cameraNumber;
+    private static int cameraNumber = 1;
     private static final String TAG = ActionBarActivity.class.getSimpleName();
     private CameraHardware cameraHardware;
 
@@ -44,12 +44,7 @@ public class TakePhoto extends ActionBarActivity {
 
         ButterKnife.inject(this);
         cameraHardware = new CameraHardware();
-        cameraNumber = getIntent().getIntExtra("CAMERA_NUMBER", 1);
         loadCamera();
-
-        mPreview = new CameraPreview(this, mCamera);
-        preview.addView(mPreview);
-
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         captureButton.setOnClickListener(
@@ -68,7 +63,7 @@ public class TakePhoto extends ActionBarActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        mCamera.release();
+        
     }
 
     private Camera.PictureCallback mPicture = new Camera.PictureCallback() {
@@ -118,6 +113,11 @@ public class TakePhoto extends ActionBarActivity {
 
     private void loadCamera(){
 
+        if(mCamera != null){
+            mCamera.release();
+            preview.removeView(mPreview);
+        }
+
         if(cameraNumber == 1){
             cameraHardware.openBackCamera();
             mCamera = cameraHardware.getCamera();
@@ -125,12 +125,13 @@ public class TakePhoto extends ActionBarActivity {
             cameraHardware.openFrontalCamera();
             mCamera = cameraHardware.getCamera();
         }
+
+        mPreview = new CameraPreview(this, mCamera);
+        preview.addView(mPreview);
     }
 
     private void changeCamera(){
-        this.finish();
-        Intent intent = new Intent(this, TakePhoto.class);
-        intent.putExtra("CAMERA_NUMBER", (cameraNumber + 1 ) % 2);
-        startActivity(intent);
+        cameraNumber = (cameraNumber + 1 ) % 2;
+        loadCamera();
     }
 }

@@ -44,11 +44,11 @@ public class CameraHardware {
     public void openFrontalCamera() {
         try {
             if(!isCameraOpen) {
-                camera = Camera.open(FRONTAL_CAMERA);
                 isCameraOpen = true;
             }else{
                 closeCamera();
             }
+            camera = Camera.open(FRONTAL_CAMERA);
         } catch (Exception e) {
             Log.d(TAG, e.getStackTrace().toString());
         }
@@ -57,11 +57,11 @@ public class CameraHardware {
     public void openBackCamera() {
         try {
             if(!isCameraOpen) {
-                camera = Camera.open(BACK_CAMERA);
                 isCameraOpen = true;
             }else{
                 closeCamera();
             }
+            camera = Camera.open(BACK_CAMERA);
         } catch (Exception e) {
             Log.d(TAG, e.getStackTrace().toString());
         }
