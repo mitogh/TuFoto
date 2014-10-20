@@ -43,6 +43,5 @@
             android:label="@string/title_activity_camera"
             android:screenOrientation="portrait">
         </activity>
-    </application>
-
+    </application>>
 </manifest>

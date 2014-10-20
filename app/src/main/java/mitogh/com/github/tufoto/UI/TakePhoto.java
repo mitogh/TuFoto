@@ -62,9 +62,7 @@ public class TakePhoto extends ActionBarActivity {
     protected void onPause() {
         super.onPause();
 
-        if(mCamera != null){
-            mCamera.release();
-        }
+        releaseCamera();
     }
 
     @Override
@@ -117,11 +115,14 @@ public class TakePhoto extends ActionBarActivity {
         }
     }
 
+    private void changeCamera(){
+        cameraNumber = (cameraNumber + 1 ) % 2;
+        loadCamera();
+    }
+
     private void loadCamera(){
-        if(mCamera != null){
-            mCamera.release();
-            preview.removeView(mPreview);
-        }
+
+        releaseCamera();
 
         if(cameraNumber == 1){
             mCamera = cameraHardware.openBackCamera();
@@ -131,14 +132,26 @@ public class TakePhoto extends ActionBarActivity {
 
         try {
             mPreview = new CameraPreview(this, mCamera);
-            preview.addView(mPreview);
+            attachPreview();
         } catch (Exception e){
             Log.d(TAG, e.getMessage());
         }
     }
 
-    private void changeCamera(){
-        cameraNumber = (cameraNumber + 1 ) % 2;
-        loadCamera();
+    private void releaseCamera() {
+        if(mCamera != null){
+            mCamera.release();
+            mCamera = null;
+        }
+        detachPreview();
     }
+
+    private void detachPreview(){
+        preview.removeView(mPreview);
+    }
+
+    private void attachPreview(){
+        preview.addView(mPreview);
+    }
+
 }
