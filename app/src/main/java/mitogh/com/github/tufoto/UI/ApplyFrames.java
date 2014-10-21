@@ -21,13 +21,13 @@ import java.io.IOException;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import mitogh.com.github.tufoto.Bitmap.Processing;
+import mitogh.com.github.tufoto.Config;
 import mitogh.com.github.tufoto.R;
 
 
 public class ApplyFrames extends ActionBarActivity {
 
     public static final String TAG = ActionBarActivity.class.getSimpleName();
-    public static final String IMAGE_PATH = "IMAGE_PATH";
 
     @InjectView(R.id.imageview_display_photo)
     ImageView displayPhotoImageView;
@@ -47,7 +47,7 @@ public class ApplyFrames extends ActionBarActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         Intent intent = getIntent();
-        imagePath = intent.getStringExtra(ApplyFrames.IMAGE_PATH);
+        imagePath = intent.getStringExtra(Config.IMAGE_PATH_ID);
 
         Picasso.with(
                 getApplicationContext()

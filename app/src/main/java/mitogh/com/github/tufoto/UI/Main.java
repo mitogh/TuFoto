@@ -15,12 +15,12 @@ import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import mitogh.com.github.tufoto.Camera.CameraHardware;
+import mitogh.com.github.tufoto.Config;
 import mitogh.com.github.tufoto.R;
 
 public class Main extends ActionBarActivity implements View.OnClickListener {
 
     private static final int SELECT_PHOTO = 100;
-    private final String EMPTY_STRING = "";
 
     @InjectView(R.id.button_select_photo) Button selectPhotoButton;
     @InjectView(R.id.button_open_camera) Button takePhotoButton;
@@ -31,7 +31,7 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
         setContentView(R.layout.activity_main);
 
         getSupportActionBar().hide();
-        
+
         ButterKnife.inject(this);
 
         disableTakePhotoButtonIf(!CameraHardware.exits(this));
@@ -102,7 +102,7 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
             selectedImagePath = getPath(selectedImageUri);
         }
 
-        if (selectedImagePath.equals(EMPTY_STRING)) {
+        if (selectedImagePath.equals(Config.EMPTY_STRING)) {
             Toast.makeText(this, getString(R.string.message_problem_retrieving_image), Toast.LENGTH_LONG)
                     .show();
         } else {
@@ -115,7 +115,7 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
     public String getPath(Uri uri) {
 
         if (uri == null) {
-            return EMPTY_STRING;
+            return Config.EMPTY_STRING;
         }
 
         String[] projection = {MediaStore.Images.Media.DATA};
