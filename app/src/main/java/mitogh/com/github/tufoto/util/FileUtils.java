@@ -1,10 +1,10 @@
-package mitogh.com.github.tufoto.File;
+package mitogh.com.github.tufoto.util;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class FileName {
+public class FileUtils {
 
     private static final String FORMAT = "yyyyMMdd_HHmmss";
     private static final String PREFIX = "JPEG_";
@@ -16,7 +16,7 @@ public class FileName {
 
     public static File create(String directoryPath){
         return new File(
-                directoryPath + File.pathSeparator + PREFIX + FileName.timeStamp() + EXTENSION
+                directoryPath + File.pathSeparator + PREFIX + FileUtils.timeStamp() + EXTENSION
         );
     }
 }

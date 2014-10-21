@@ -1,4 +1,4 @@
-package mitogh.com.github.tufoto.UI;
+package mitogh.com.github.tufoto.ui;
 
 import android.content.Intent;
 import android.hardware.Camera;
@@ -20,10 +20,10 @@ import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import mitogh.com.github.tufoto.Camera.CameraHardware;
-import mitogh.com.github.tufoto.Camera.CameraPreview;
-import mitogh.com.github.tufoto.File.Directory;
-import mitogh.com.github.tufoto.File.FileName;
+import mitogh.com.github.tufoto.camera.CameraHardware;
+import mitogh.com.github.tufoto.camera.CameraPreview;
+import mitogh.com.github.tufoto.util.DirectoryUtils;
+import mitogh.com.github.tufoto.util.FileUtils;
 import mitogh.com.github.tufoto.R;
 
 public class TakePhoto extends ActionBarActivity {
@@ -58,8 +58,8 @@ public class TakePhoto extends ActionBarActivity {
                 }
         );
         cameraHardware = new CameraHardware();
-        Directory.create();
-        directoryPath = Directory.NAME.getPath();
+        DirectoryUtils.create();
+        directoryPath = DirectoryUtils.NAME.getPath();
     }
 
     @Override
@@ -138,7 +138,7 @@ public class TakePhoto extends ActionBarActivity {
     private Camera.PictureCallback mPicture = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
-            File pictureFile = FileName.create(directoryPath);
+            File pictureFile = FileUtils.create(directoryPath);
 
             try {
                 FileOutputStream fos = new FileOutputStream(pictureFile);

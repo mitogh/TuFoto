@@ -18,7 +18,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".UI.Main"
+            android:name=".ui.Main"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/app_name"
             android:launchMode="singleTask"
@@ -30,16 +30,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".UI.ApplyFrames"
+            android:name=".ui.ApplyFrames"
             android:label="@string/title_activity_add_frames"
             android:screenOrientation="portrait"
-            android:parentActivityName=".UI.Main" >
+            android:parentActivityName=".ui.Main" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Main" />
         </activity>
         <activity
-            android:name=".UI.TakePhoto"
+            android:name=".ui.TakePhoto"
             android:label="@string/title_activity_camera"
             android:screenOrientation="portrait">
         </activity>

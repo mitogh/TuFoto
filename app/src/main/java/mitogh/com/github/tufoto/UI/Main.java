@@ -1,4 +1,4 @@
-package mitogh.com.github.tufoto.UI;
+package mitogh.com.github.tufoto.ui;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import mitogh.com.github.tufoto.Camera.CameraHardware;
+import mitogh.com.github.tufoto.camera.CameraHardware;
 import mitogh.com.github.tufoto.Config;
 import mitogh.com.github.tufoto.R;
 

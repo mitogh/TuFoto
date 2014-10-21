@@ -1,13 +1,13 @@
-package mitogh.com.github.tufoto.File;
+package mitogh.com.github.tufoto.util;
 
 import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
 
-public class Directory {
+public class DirectoryUtils {
 
-    private static final String TAG = Directory.class.getSimpleName();
+    private static final String TAG = DirectoryUtils.class.getSimpleName();
 
     private static final File PICTURES = Environment.getExternalStoragePublicDirectory(
             Environment.DIRECTORY_PICTURES
@@ -27,10 +27,10 @@ public class Directory {
     }
 
     public static boolean exists(){
-        return Directory.NAME.exists();
+        return DirectoryUtils.NAME.exists();
     }
 
     private static boolean createDirectory(){
-        return Directory.NAME.mkdirs();
+        return DirectoryUtils.NAME.mkdirs();
     }
 }

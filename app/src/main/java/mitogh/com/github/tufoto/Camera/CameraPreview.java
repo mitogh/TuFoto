@@ -1,4 +1,4 @@
-package mitogh.com.github.tufoto.Camera;
+package mitogh.com.github.tufoto.camera;
 
 import android.content.Context;
 import android.hardware.Camera;

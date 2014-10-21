@@ -1,4 +1,4 @@
-package mitogh.com.github.tufoto.Bitmap;
+package mitogh.com.github.tufoto.util;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,9 +10,9 @@ import android.util.Log;
 import java.io.File;
 import java.io.IOException;
 
-public class Processing {
+public class BitmapProcessingUtils {
 
-    private static final String TAG = Processing.class.getSimpleName();
+    private static final String TAG = BitmapProcessingUtils.class.getSimpleName();
 
     public static int getOrientation(String imagePath) throws IOException {
         ExifInterface ei = new ExifInterface(imagePath);
