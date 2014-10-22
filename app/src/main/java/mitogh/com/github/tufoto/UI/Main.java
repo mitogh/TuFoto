@@ -74,9 +74,9 @@ public class Main extends ActionBarActivity{
     }
 
     private void disableTakePhotoButtonIf(Boolean condition) {
-        if (condition) {
-            takePhotoButton.setVisibility(View.INVISIBLE);
-        }
+        takePhotoButton.setVisibility(
+                (condition) ? View.INVISIBLE : View.VISIBLE
+        );
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
