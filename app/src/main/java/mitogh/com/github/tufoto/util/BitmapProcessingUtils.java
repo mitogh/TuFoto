@@ -16,8 +16,9 @@ public class BitmapProcessingUtils {
 
     public static int getOrientation(String imagePath) throws IOException {
         ExifInterface ei = new ExifInterface(imagePath);
-        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
+        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
 
+        Log.d(TAG, "The orientation is: " + orientation);
         return orientation;
     }
 
@@ -156,4 +157,5 @@ public class BitmapProcessingUtils {
 
         return cs;
     }
+
 }

@@ -2,6 +2,7 @@ package mitogh.com.github.tufoto.ui;
 
 import android.content.Intent;
 import android.hardware.Camera;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -20,11 +21,12 @@ import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import mitogh.com.github.tufoto.Config;
+import mitogh.com.github.tufoto.R;
 import mitogh.com.github.tufoto.camera.CameraHardware;
 import mitogh.com.github.tufoto.camera.CameraPreview;
 import mitogh.com.github.tufoto.util.DirectoryUtils;
 import mitogh.com.github.tufoto.util.FileUtils;
-import mitogh.com.github.tufoto.R;
 
 public class TakePhoto extends ActionBarActivity {
 
@@ -112,6 +114,7 @@ public class TakePhoto extends ActionBarActivity {
         }
 
         try {
+            mCamera.setDisplayOrientation(90);
             mPreview = new CameraPreview(this, mCamera);
             attachPreview();
         } catch (Exception e){
@@ -140,6 +143,18 @@ public class TakePhoto extends ActionBarActivity {
         public void onPictureTaken(byte[] data, Camera camera) {
             File pictureFile = FileUtils.create(directoryPath);
 
+            ExifInterface exif = null;
+            try {
+                exif = new ExifInterface(
+                        pictureFile.getAbsolutePath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            int orientation = exif.getAttributeInt(
+                    ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_UNDEFINED);
+            Log.d(TAG, "Real orientation is: " + orientation);
+
             try {
                 FileOutputStream fos = new FileOutputStream(pictureFile);
                 fos.write(data);
@@ -156,7 +171,7 @@ public class TakePhoto extends ActionBarActivity {
 
     private void startFrames(String imagePath) {
         Intent intent = new Intent(this, ApplyFrames.class);
-        intent.putExtra(ApplyFrames.IMAGE_PATH, imagePath);
+        intent.putExtra(Config.IMAGE_PATH_ID, imagePath);
         startActivity(intent);
     }
 }

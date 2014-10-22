@@ -2,7 +2,6 @@ package mitogh.com.github.tufoto.camera;
 
 import android.content.Context;
 import android.hardware.Camera;
-import android.os.Build;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -27,17 +26,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
     }
 
-
     public void surfaceCreated(SurfaceHolder holder) {
-
-        try {
-            if (Build.VERSION.SDK_INT >= 8) {
-                mCamera.setDisplayOrientation(90);
-            }
-        }catch(Exception e){
-            Log.d(TAG, "Error setting camera preview: " + e.getMessage());
-        }
-
         try {
             mCamera.setPreviewDisplay(holder);
             mCamera.startPreview();

@@ -9,8 +9,8 @@ public class CameraHardware {
 
     private static final String TAG = CameraHardware.class.getSimpleName();
 
-    private static Integer BACK_CAMERA = null;
-    private static Integer FRONTAL_CAMERA = null;
+    public static Integer BACK_CAMERA = null;
+    public static Integer FRONTAL_CAMERA = null;
 
     public CameraHardware() {
         searchCameras();
