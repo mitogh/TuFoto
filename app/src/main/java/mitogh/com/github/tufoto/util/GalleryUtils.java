@@ -60,7 +60,7 @@ public class GalleryUtils {
         return uri.getPath();
     }
 
-    public static boolean isWrong(String imagePath) {
+    public static boolean imageIsWrong(String imagePath) {
         return imagePath.equals(Config.EMPTY_STRING);
     }
 }

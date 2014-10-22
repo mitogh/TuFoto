@@ -17,7 +17,7 @@ import mitogh.com.github.tufoto.camera.CameraHardware;
 import mitogh.com.github.tufoto.util.GalleryUtils;
 import mitogh.com.github.tufoto.util.MessageUtils;
 
-public class Main extends ActionBarActivity implements View.OnClickListener {
+public class Main extends ActionBarActivity{
 
     @InjectView(R.id.button_select_photo) Button selectPhotoButton;
     @InjectView(R.id.button_open_camera) Button takePhotoButton;
@@ -33,19 +33,23 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
 
         disableTakePhotoButtonIf(!CameraHardware.exits(this));
 
-        takePhotoButton.setOnClickListener(this);
-        selectPhotoButton.setOnClickListener(this);
+        takePhotoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openCameraActivity();
+            }
+        });
+        selectPhotoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GalleryUtils.selectImage(Main.this);
+            }
+        });
     }
 
     @Override
     protected void onPause(){
         super.onPause();
-    }
-
-    private void openTheCamera() {
-        startActivity(
-            new Intent(this, TakePhoto.class)
-        );
     }
 
     @Override
@@ -63,41 +67,42 @@ public class Main extends ActionBarActivity implements View.OnClickListener {
         return super.onOptionsItemSelected(item);
     }
 
+    private void openCameraActivity() {
+        startActivity(
+                new Intent(this, TakePhoto.class)
+        );
+    }
+
     private void disableTakePhotoButtonIf(Boolean condition) {
         if (condition) {
             takePhotoButton.setVisibility(View.INVISIBLE);
         }
     }
 
-    public void onClick(View v) {
-        int id = v.getId();
-        switch (id) {
-            case R.id.button_open_camera:
-                openTheCamera();
-                break;
-
-            case R.id.button_select_photo:
-                GalleryUtils.selectImage(Main.this);
-                break;
-        }
-    }
-
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        String selectedImagePath = "";
+        String selectedImagePath = Config.EMPTY_STRING;
 
         if (resultCode == RESULT_OK && requestCode == GalleryUtils.getIDFromImagesSelectedFromGallery() ) {
             Uri selectedImageUri = data.getData();
             selectedImagePath = GalleryUtils.getImagePath(this, selectedImageUri);
         }
 
-        if (GalleryUtils.isWrong(selectedImagePath)) {
-            MessageUtils.create(
-                    getApplicationContext(), getString(R.string.message_problem_retrieving_image)
-            ).show();
+        if (GalleryUtils.imageIsWrong(selectedImagePath)) {
+            showErrorMessage();
         } else {
-            Intent intent = new Intent(this, ApplyFrames.class);
-            intent.putExtra(Config.IMAGE_PATH_ID, selectedImagePath);
-            startActivity(intent);
+            startApplyFramesWith(selectedImagePath);
         }
+    }
+
+    private void showErrorMessage() {
+        MessageUtils.create(
+                getApplicationContext(), getString(R.string.message_problem_retrieving_image)
+        ).show();
+    }
+
+    private void startApplyFramesWith(String selectedImagePath) {
+        Intent intent = new Intent(this, ApplyFrames.class);
+        intent.putExtra(Config.IMAGE_PATH_ID, selectedImagePath);
+        startActivity(intent);
     }
 }
