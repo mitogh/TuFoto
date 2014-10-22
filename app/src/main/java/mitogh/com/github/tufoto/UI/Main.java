@@ -82,7 +82,7 @@ public class Main extends ActionBarActivity{
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         String selectedImagePath = Config.EMPTY_STRING;
 
-        if (resultCode == RESULT_OK && requestCode == GalleryUtils.getIDFromImagesSelectedFromGallery() ) {
+        if (successfullRequest(requestCode, resultCode)) {
             Uri selectedImageUri = data.getData();
             selectedImagePath = GalleryUtils.getImagePath(this, selectedImageUri);
         }
@@ -92,6 +92,18 @@ public class Main extends ActionBarActivity{
         } else {
             startApplyFramesWith(selectedImagePath);
         }
+    }
+
+    private boolean successfullRequest(int requestCode, int resultCode) {
+        return isSuccess(resultCode) && isFromGallery(requestCode);
+    }
+
+    private boolean isSuccess(int resultCode) {
+        return resultCode == RESULT_OK;
+    }
+
+    private boolean isFromGallery(int requestCode) {
+        return requestCode == GalleryUtils.getIDFromImagesSelectedFromGallery();
     }
 
     private void showErrorMessage() {
