@@ -1,6 +1,8 @@
 package mitogh.com.github.tufoto.ui;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.media.ExifInterface;
 import android.net.Uri;
@@ -150,12 +152,9 @@ public class TakePhoto extends ActionBarActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            int orientation = exif.getAttributeInt(
-                    ExifInterface.TAG_ORIENTATION,
-                    ExifInterface.ORIENTATION_UNDEFINED);
-            Log.d(TAG, "Real orientation is: " + orientation);
 
             try {
+
                 FileOutputStream fos = new FileOutputStream(pictureFile);
                 fos.write(data);
                 fos.close();
@@ -168,6 +167,13 @@ public class TakePhoto extends ActionBarActivity {
             }
         }
     };
+
+    public static Bitmap RotateBitmap(Bitmap source, float angle)
+    {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+    }
 
     private void startFrames(String imagePath) {
         Intent intent = new Intent(this, ApplyFrames.class);

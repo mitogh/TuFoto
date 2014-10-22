@@ -21,17 +21,13 @@ public class CameraHardware {
         Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
         cameraCount = Camera.getNumberOfCameras();
 
-        for (int camID = 0; camID < cameraCount; camID++) {
-            Camera.getCameraInfo(camID, cameraInfo);
+        for (int camIndex = 0; camIndex < cameraCount; camIndex++) {
+            Camera.getCameraInfo(camIndex, cameraInfo);
 
-            switch (cameraInfo.facing){
-                case Camera.CameraInfo.CAMERA_FACING_FRONT:
-                    FRONTAL_CAMERA = camID;
-                    break;
-
-                case Camera.CameraInfo.CAMERA_FACING_BACK:
-                    BACK_CAMERA = camID;
-                    break;
+            if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+                FRONTAL_CAMERA = camIndex;
+            } else if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
+                BACK_CAMERA = camIndex;
             }
         }
     }

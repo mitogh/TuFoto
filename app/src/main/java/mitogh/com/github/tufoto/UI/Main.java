@@ -29,9 +29,9 @@ public class Main extends ActionBarActivity{
 
         getSupportActionBar().hide();
 
-        ButterKnife.inject(this);
+        ButterKnife.inject(Main.this);
 
-        disableTakePhotoButtonIf(!CameraHardware.exits(this));
+        disableTakePhotoButtonIf(!CameraHardware.exits(getApplicationContext()));
 
         takePhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,7 +69,7 @@ public class Main extends ActionBarActivity{
 
     private void openCameraActivity() {
         startActivity(
-                new Intent(this, TakePhoto.class)
+                new Intent(getApplicationContext(), TakePhoto.class)
         );
     }
 
