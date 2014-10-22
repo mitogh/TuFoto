@@ -143,7 +143,7 @@ public class TakePhoto extends ActionBarActivity {
     private Camera.PictureCallback mPicture = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
-            File pictureFile = FileUtils.create(directoryPath);
+            File pictureFile = FileUtils.createFileIn(directoryPath);
 
             ExifInterface exif = null;
             try {
@@ -154,7 +154,6 @@ public class TakePhoto extends ActionBarActivity {
             }
 
             try {
-
                 FileOutputStream fos = new FileOutputStream(pictureFile);
                 fos.write(data);
                 fos.close();

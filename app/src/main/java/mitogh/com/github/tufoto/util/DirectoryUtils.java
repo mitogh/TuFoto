@@ -21,7 +21,7 @@ public class DirectoryUtils {
     public static void create(){
         if( !exists() ){
             if( !createDirectory() ){
-                Log.d(TAG, "failed to create directory");
+                Log.d(TAG, "failed to directory");
             }
         }
     }

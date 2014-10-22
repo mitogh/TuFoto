@@ -14,7 +14,7 @@ public class FileUtils {
         return new SimpleDateFormat(FORMAT).format(new Date());
     }
 
-    public static File create(String directoryPath){
+    public static File createFileIn(String directoryPath){
         return new File(
                 directoryPath + File.pathSeparator + PREFIX + FileUtils.timeStamp() + EXTENSION
         );
