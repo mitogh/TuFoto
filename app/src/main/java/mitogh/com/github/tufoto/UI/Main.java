@@ -82,7 +82,7 @@ public class Main extends ActionBarActivity{
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         String selectedImagePath = Config.EMPTY_STRING;
 
-        if (successfullRequest(requestCode, resultCode)) {
+        if (successfulRequest(requestCode, resultCode)) {
             Uri selectedImageUri = data.getData();
             selectedImagePath = GalleryUtils.getImagePath(this, selectedImageUri);
         }
@@ -94,7 +94,7 @@ public class Main extends ActionBarActivity{
         }
     }
 
-    private boolean successfullRequest(int requestCode, int resultCode) {
+    private boolean successfulRequest(int requestCode, int resultCode) {
         return isSuccess(resultCode) && isFromGallery(requestCode);
     }
 
