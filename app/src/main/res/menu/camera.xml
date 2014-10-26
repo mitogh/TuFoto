@@ -2,10 +2,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="mitogh.com.github.tufoto.ui.TakePhoto" >
-    <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
-        android:orderInCategory="100"
-        app:showAsAction="never" />
     <item android:id="@+id/action_change_camera"
         android:icon="@drawable/icon_change_camera"
         android:title="@string/change_camera_icon"
