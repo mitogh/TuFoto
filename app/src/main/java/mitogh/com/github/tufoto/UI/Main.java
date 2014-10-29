@@ -80,8 +80,7 @@ public class Main extends ActionBarActivity{
         String selectedImagePath = Config.EMPTY_STRING;
 
         if (successfulRequest(requestCode, resultCode)) {
-            Uri selectedImageUri = data.getData();
-            selectedImagePath = GalleryUtils.getImagePath(this, selectedImageUri);
+            selectedImagePath = getImagePath(data);
         }
 
         if (GalleryUtils.imageIsWrong(selectedImagePath)) {
@@ -89,6 +88,15 @@ public class Main extends ActionBarActivity{
         } else {
             startApplyFramesWith(selectedImagePath);
         }
+    }
+
+    private Uri getImageUri(Intent data){
+        return data.getData();
+    }
+
+    private String getImagePath(Intent data){
+        Uri selectedImageUri = getImageUri(data);
+        return GalleryUtils.getImagePath(this, selectedImageUri);
     }
 
     private boolean successfulRequest(int requestCode, int resultCode) {
