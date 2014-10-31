@@ -1,10 +1,7 @@
 package mitogh.com.github.tufoto.ui;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Matrix;
 import android.hardware.Camera;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -93,7 +90,7 @@ public class TakePhoto extends ActionBarActivity {
                 this.finish();
                 return true;
             case R.id.action_change_camera:
-                changeCamera();
+                updateCamera();
                 loadCamera();
                 return true;
             default:
@@ -101,19 +98,12 @@ public class TakePhoto extends ActionBarActivity {
         }
     }
 
-    private void changeCamera(){
-        cameraNumber = (cameraNumber + 1 ) % 2;
-    }
+
 
     private void loadCamera(){
 
         releaseCamera();
-
-        if(cameraNumber == 1){
-            mCamera = cameraHardware.openBackCamera();
-        }else{
-            mCamera = cameraHardware.openFrontalCamera();
-        }
+        setActiveCamera();
 
         try {
             mCamera.setDisplayOrientation(90);
@@ -121,6 +111,18 @@ public class TakePhoto extends ActionBarActivity {
             attachPreview();
         } catch (Exception e){
             Log.d(TAG, e.getMessage());
+        }
+    }
+
+    private void updateCamera(){
+        cameraNumber = (cameraNumber + 1) % 2;
+    }
+
+    private void setActiveCamera() {
+        if(cameraNumber == 1){
+            mCamera = cameraHardware.openBackCamera();
+        }else{
+            mCamera = cameraHardware.openFrontalCamera();
         }
     }
 
@@ -145,14 +147,6 @@ public class TakePhoto extends ActionBarActivity {
         public void onPictureTaken(byte[] data, Camera camera) {
             File pictureFile = FileUtils.createFileIn(directoryPath);
 
-            ExifInterface exif = null;
-            try {
-                exif = new ExifInterface(
-                        pictureFile.getAbsolutePath());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
             try {
                 FileOutputStream fos = new FileOutputStream(pictureFile);
                 fos.write(data);
@@ -166,13 +160,6 @@ public class TakePhoto extends ActionBarActivity {
             }
         }
     };
-
-    public static Bitmap RotateBitmap(Bitmap source, float angle)
-    {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(angle);
-        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
-    }
 
     private void startFrames(String imagePath) {
         Intent intent = new Intent(this, ApplyFrames.class);
