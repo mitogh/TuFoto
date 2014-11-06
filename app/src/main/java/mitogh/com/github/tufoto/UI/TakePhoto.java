@@ -3,6 +3,7 @@ package mitogh.com.github.tufoto.ui;
 import android.content.Intent;
 import android.hardware.Camera;
 import android.media.ExifInterface;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -56,6 +57,7 @@ public class TakePhoto extends ActionBarActivity {
                     @Override
                     public void onClick(View v) {
                         mCamera.takePicture(null, null, mPicture);
+                        playSound();
                     }
                 }
         );
@@ -168,5 +170,16 @@ public class TakePhoto extends ActionBarActivity {
             intent.putExtra(Config.ANGLE, ExifInterface.ORIENTATION_ROTATE_270);
         }
         startActivity(intent);
+    }
+
+    private void playSound(){
+        MediaPlayer player = MediaPlayer.create(this, R.raw.sound_shutter);
+        player.start();
+        player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                mediaPlayer.release();
+            }
+        });
     }
 }
