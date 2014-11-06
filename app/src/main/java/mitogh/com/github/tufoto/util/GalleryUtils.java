@@ -55,9 +55,9 @@ public class GalleryUtils {
                     .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
             return cursor.getString(column_index);
+        } else {
+            return uri.getPath();
         }
-
-        return uri.getPath();
     }
 
     public static boolean imageIsWrong(String imagePath) {

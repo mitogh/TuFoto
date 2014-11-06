@@ -29,7 +29,6 @@ public class BitmapProcessingUtils {
     public static int getImageOrientation(String imagePath){
         int rotate = 0;
         try {
-
             File imageFile = new File(imagePath);
             ExifInterface exif = new ExifInterface(
                     imageFile.getAbsolutePath());

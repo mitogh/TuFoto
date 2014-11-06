@@ -2,8 +2,8 @@ package mitogh.com.github.tufoto.ui;
 
 import android.content.Intent;
 import android.hardware.Camera;
-import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -17,6 +17,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -25,7 +27,6 @@ import mitogh.com.github.tufoto.R;
 import mitogh.com.github.tufoto.camera.CameraHardware;
 import mitogh.com.github.tufoto.camera.CameraPreview;
 import mitogh.com.github.tufoto.util.DirectoryUtils;
-import mitogh.com.github.tufoto.util.FileUtils;
 
 public class TakePhoto extends ActionBarActivity {
 
@@ -98,15 +99,19 @@ public class TakePhoto extends ActionBarActivity {
         }
     }
 
-
-
     private void loadCamera(){
 
         releaseCamera();
         setActiveCamera();
 
         try {
-            mCamera.setDisplayOrientation(90);
+            int rotation = 90;
+            Camera.Parameters parameters = mCamera.getParameters();
+            parameters.setRotation(rotation);
+
+            mCamera.setDisplayOrientation(rotation);
+            //    mCamera.setParameters(parameters);
+
             mPreview = new CameraPreview(this, mCamera);
             attachPreview();
         } catch (Exception e){
@@ -145,14 +150,13 @@ public class TakePhoto extends ActionBarActivity {
     private Camera.PictureCallback mPicture = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
-            File pictureFile = FileUtils.createFileIn(directoryPath);
-
+            File pictureFile = getOutputMediaFile();
             try {
                 FileOutputStream fos = new FileOutputStream(pictureFile);
                 fos.write(data);
                 fos.close();
                 mCamera.release();
-                startFrames(Uri.fromFile(pictureFile).getPath());
+                startFrames(pictureFile.getPath(), cameraNumber);
             } catch (FileNotFoundException e) {
                 Log.d(TAG, "File not found: " + e.getMessage());
             } catch (IOException e) {
@@ -161,9 +165,31 @@ public class TakePhoto extends ActionBarActivity {
         }
     };
 
-    private void startFrames(String imagePath) {
+    private void startFrames(String imagePath, int cameraNumber) {
         Intent intent = new Intent(this, ApplyFrames.class);
         intent.putExtra(Config.IMAGE_PATH_ID, imagePath);
+        intent.putExtra(Config.CAMERA, cameraNumber);
         startActivity(intent);
+    }
+
+    private static File getOutputMediaFile() {
+        File mediaStorageDir = new File(
+                Environment
+                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                "MyCameraApp");
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Log.d("MyCameraApp", "failed to create directory");
+                return null;
+            }
+        }
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
+                .format(new Date());
+        File mediaFile;
+        mediaFile = new File(mediaStorageDir.getPath() + File.separator
+                + "IMG_" + timeStamp + ".jpg");
+
+        return mediaFile;
     }
 }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -83,10 +84,14 @@ public class Main extends ActionBarActivity{
             selectedImagePath = getImagePath(data);
         }
 
-        if (GalleryUtils.imageIsWrong(selectedImagePath)) {
-            showErrorMessage();
-        } else {
-            startApplyFramesWith(selectedImagePath);
+        if(selectedImagePath == null ){
+            Log.d("DEBUG", "selectedImagePath is null");
+        }else {
+            if (GalleryUtils.imageIsWrong(selectedImagePath)) {
+                showErrorMessage();
+            } else {
+                startApplyFramesWith(selectedImagePath);
+            }
         }
     }
 

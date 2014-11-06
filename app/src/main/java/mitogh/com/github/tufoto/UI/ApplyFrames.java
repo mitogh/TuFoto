@@ -2,7 +2,10 @@ package mitogh.com.github.tufoto.ui;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
+import android.media.ExifInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -20,9 +23,9 @@ import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import mitogh.com.github.tufoto.util.BitmapProcessingUtils;
 import mitogh.com.github.tufoto.Config;
 import mitogh.com.github.tufoto.R;
+import mitogh.com.github.tufoto.util.BitmapProcessingUtils;
 
 
 public class ApplyFrames extends ActionBarActivity {
@@ -36,6 +39,7 @@ public class ApplyFrames extends ActionBarActivity {
     ProgressBar imageLoadingProgressBar;
 
     private String imagePath;
+    private int cameraNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +52,8 @@ public class ApplyFrames extends ActionBarActivity {
 
         Intent intent = getIntent();
         imagePath = intent.getStringExtra(Config.IMAGE_PATH_ID);
-
+        cameraNumber = intent.getIntExtra(Config.CAMERA, 1);
+        Log.d("DEBUG", imagePath);
         Picasso.with(
                 getApplicationContext()
         ).load(
@@ -95,18 +100,64 @@ public class ApplyFrames extends ActionBarActivity {
         }
     };
 
-    public Bitmap loadImage() {
+    public Bitmap loadImage(){
+
+        Bitmap realImage;
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 5;
+
+        options.inPurgeable=true;                   //Tell to gc that whether it needs free memory, the Bitmap can be cleared
+
+        options.inInputShareable=true;              //Which kind of reference will be used to recover the Bitmap data after being clear, when it will be used in the future
+
         int targetW = displayPhotoImageView.getWidth();
         int targetH = displayPhotoImageView.getHeight();
 
-        Bitmap bitmap = BitmapProcessingUtils.resize(imagePath, targetW, targetH);
+        realImage = BitmapProcessingUtils.resize(imagePath, targetW, targetH);
+        ExifInterface exif = null;
+        try {
+            exif = new ExifInterface(imagePath);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         try {
-            int orientation = BitmapProcessingUtils.getOrientation(imagePath);
-            bitmap = BitmapProcessingUtils.fixOrientation(bitmap, orientation);
-        } catch (IOException e) {
-            Log.d(TAG, e.getStackTrace().toString());
+            Log.d("EXIF value -> ",
+                    exif.getAttribute(ExifInterface.TAG_ORIENTATION));
+            if (exif.getAttribute(ExifInterface.TAG_ORIENTATION)
+                    .equalsIgnoreCase("1")) {
+                if(cameraNumber == 1) {
+                    realImage = rotate(realImage, 90);
+                }else {
+                    realImage = rotate(realImage, 270);
+                }
+            } else if (exif.getAttribute(ExifInterface.TAG_ORIENTATION)
+                    .equalsIgnoreCase("8")) {
+                realImage = rotate(realImage, 90);
+            } else if (exif.getAttribute(ExifInterface.TAG_ORIENTATION)
+                    .equalsIgnoreCase("3")) {
+                realImage = rotate(realImage, 90);
+            } else if (exif.getAttribute(ExifInterface.TAG_ORIENTATION)
+                    .equalsIgnoreCase("0")) {
+                if(cameraNumber == 0){
+                    realImage = rotate(realImage, 180);
+                }
+                realImage = rotate(realImage, 90);
+            } else if((exif.getAttribute(ExifInterface.TAG_ORIENTATION)
+                    .equalsIgnoreCase("6")) ){
+            }
+        } catch (Exception e) {
+
         }
-        return bitmap;
+
+        return realImage;
+    }
+
+    public static Bitmap rotate(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(),
+                source.getHeight(), matrix, false);
     }
 }
