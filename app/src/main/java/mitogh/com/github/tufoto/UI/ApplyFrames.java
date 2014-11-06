@@ -36,7 +36,7 @@ public class ApplyFrames extends ActionBarActivity {
     ProgressBar imageLoadingProgressBar;
 
     private String imagePath;
-    private int rotation_angle;
+    private int rotationAngle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,7 @@ public class ApplyFrames extends ActionBarActivity {
 
         Intent intent = getIntent();
         imagePath = intent.getStringExtra(Config.IMAGE_PATH_ID);
-        rotation_angle = intent.getIntExtra(Config.ANGLE, ExifInterface.ORIENTATION_NORMAL);
+        rotationAngle = intent.getIntExtra(Config.ANGLE, ExifInterface.ORIENTATION_NORMAL);
         Log.d("DEBUG", imagePath);
         Picasso.with(
                 getApplicationContext()
@@ -101,9 +101,7 @@ public class ApplyFrames extends ActionBarActivity {
         int targetW = displayPhotoImageView.getWidth();
         int targetH = displayPhotoImageView.getHeight();
 
-        Bitmap photoResized = BitmapProcessingUtils.resize(imagePath, targetW, targetH);
-        Bitmap photoRotationFixed = BitmapProcessingUtils.rotate(photoResized, rotation_angle);
-
-        return photoRotationFixed;
+        Bitmap resizedPhoto = BitmapProcessingUtils.resize(imagePath, targetW, targetH);
+        return BitmapProcessingUtils.getPortraitAlignment(resizedPhoto, rotationAngle);
     }
 }

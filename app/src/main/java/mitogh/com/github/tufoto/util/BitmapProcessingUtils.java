@@ -8,28 +8,31 @@ import android.media.ExifInterface;
 
 public class BitmapProcessingUtils {
 
-    public static Bitmap rotate(Bitmap bitmap, int orientation){
 
-            Matrix matrix = new Matrix();
-            switch (orientation) {
-                case ExifInterface.ORIENTATION_NORMAL:
-                    return bitmap;
-                case ExifInterface.ORIENTATION_ROTATE_90:
-                    matrix.setRotate(90);
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_270:
-                    matrix.setRotate(-90);
-                    break;
-                default:
-                    return bitmap;
-            }
-            try {
-                Bitmap bmRotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-                bitmap.recycle();
-                return bmRotated;
-            } catch (OutOfMemoryError e) {
+    public static Bitmap getPortraitAlignment(Bitmap bitmap, int degrees) {
+        switch (degrees) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                return  BitmapProcessingUtils.rotate(bitmap, 90);
+
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                return BitmapProcessingUtils.rotate(bitmap, -90);
+
+            default:
                 return bitmap;
-            }
+        }
+    }
+
+    public static Bitmap rotate(Bitmap bitmap, int degrees) {
+        Matrix matrix = new Matrix();
+        matrix.setRotate(degrees);
+
+        try {
+            Bitmap bitmapRotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            bitmap.recycle();
+            return bitmapRotated;
+        } catch (OutOfMemoryError e) {
+            return bitmap;
+        }
     }
 
     public static Bitmap resize(String imagePath, int width, int height) {
@@ -55,7 +58,7 @@ public class BitmapProcessingUtils {
     private static int getScaleFactor(int width, int height, int photoWidth, int photoHeight) {
         try {
             return Math.min(photoWidth / width, photoHeight / height);
-        } catch(ArithmeticException e) {
+        } catch (ArithmeticException e) {
             return 1;
         }
     }
