@@ -2,8 +2,8 @@ package mitogh.com.github.tufoto.ui;
 
 import android.content.Intent;
 import android.hardware.Camera;
+import android.media.ExifInterface;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -17,8 +17,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -27,6 +25,7 @@ import mitogh.com.github.tufoto.R;
 import mitogh.com.github.tufoto.camera.CameraHardware;
 import mitogh.com.github.tufoto.camera.CameraPreview;
 import mitogh.com.github.tufoto.util.DirectoryUtils;
+import mitogh.com.github.tufoto.util.FileUtils;
 
 public class TakePhoto extends ActionBarActivity {
 
@@ -46,6 +45,7 @@ public class TakePhoto extends ActionBarActivity {
         setContentView(R.layout.activity_take_photo);
 
         ButterKnife.inject(this);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.icon_remove);
@@ -78,7 +78,6 @@ public class TakePhoto extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.camera, menu);
         return super.onCreateOptionsMenu(menu);
@@ -105,13 +104,7 @@ public class TakePhoto extends ActionBarActivity {
         setActiveCamera();
 
         try {
-            int rotation = 90;
-            Camera.Parameters parameters = mCamera.getParameters();
-            parameters.setRotation(rotation);
-
-            mCamera.setDisplayOrientation(rotation);
-            //    mCamera.setParameters(parameters);
-
+            mCamera.setDisplayOrientation(90);
             mPreview = new CameraPreview(this, mCamera);
             attachPreview();
         } catch (Exception e){
@@ -150,7 +143,7 @@ public class TakePhoto extends ActionBarActivity {
     private Camera.PictureCallback mPicture = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
-            File pictureFile = getOutputMediaFile();
+            File pictureFile = FileUtils.createFileIn(directoryPath);
             try {
                 FileOutputStream fos = new FileOutputStream(pictureFile);
                 fos.write(data);
@@ -168,28 +161,12 @@ public class TakePhoto extends ActionBarActivity {
     private void startFrames(String imagePath, int cameraNumber) {
         Intent intent = new Intent(this, ApplyFrames.class);
         intent.putExtra(Config.IMAGE_PATH_ID, imagePath);
-        intent.putExtra(Config.CAMERA, cameraNumber);
-        startActivity(intent);
-    }
 
-    private static File getOutputMediaFile() {
-        File mediaStorageDir = new File(
-                Environment
-                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                "MyCameraApp");
-        if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
-                Log.d("MyCameraApp", "failed to create directory");
-                return null;
-            }
+        if(cameraNumber == 1) {
+            intent.putExtra(Config.ANGLE, ExifInterface.ORIENTATION_ROTATE_90);
+        }else {
+            intent.putExtra(Config.ANGLE, ExifInterface.ORIENTATION_ROTATE_270);
         }
-        // Create a media file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
-                .format(new Date());
-        File mediaFile;
-        mediaFile = new File(mediaStorageDir.getPath() + File.separator
-                + "IMG_" + timeStamp + ".jpg");
-
-        return mediaFile;
+        startActivity(intent);
     }
 }

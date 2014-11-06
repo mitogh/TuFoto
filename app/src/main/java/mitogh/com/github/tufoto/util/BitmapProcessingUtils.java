@@ -5,91 +5,20 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
-import android.util.Log;
-
-import java.io.File;
-import java.io.IOException;
 
 public class BitmapProcessingUtils {
-
-    private static final String TAG = BitmapProcessingUtils.class.getSimpleName();
-
-    public static int getOrientation(String imagePath) throws IOException {
-        ExifInterface ei = new ExifInterface(imagePath);
-        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
-
-        Log.d(TAG, "The orientation is: " + orientation);
-        return orientation;
-    }
-
-    public static Bitmap fixOrientation(Bitmap source, int orientation){
-        return rotate(source, orientation);
-    }
-
-    public static int getImageOrientation(String imagePath){
-        int rotate = 0;
-        try {
-            File imageFile = new File(imagePath);
-            ExifInterface exif = new ExifInterface(
-                    imageFile.getAbsolutePath());
-            int orientation = exif.getAttributeInt(
-                    ExifInterface.TAG_ORIENTATION,
-                    ExifInterface.ORIENTATION_NORMAL);
-
-            switch (orientation) {
-                case ExifInterface.ORIENTATION_ROTATE_270:
-                    rotate = 270;
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_180:
-                    rotate = 180;
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_90:
-                    rotate = 90;
-                    break;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return rotate;
-    }
 
     public static Bitmap rotate(Bitmap bitmap, int orientation){
 
             Matrix matrix = new Matrix();
             switch (orientation) {
                 case ExifInterface.ORIENTATION_NORMAL:
-                    Log.d(TAG, "Orientation is NORMAL");
                     return bitmap;
-                case ExifInterface.ORIENTATION_FLIP_HORIZONTAL:
-                    matrix.setScale(-1, 1);
-                    Log.d(TAG, "Orientation is FLIP HORIZONTAL");
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_180:
-                    matrix.setRotate(180);
-                    Log.d(TAG, "Orientation is ROTATE 180");
-                    break;
-                case ExifInterface.ORIENTATION_FLIP_VERTICAL:
-                    matrix.setRotate(180);
-                    matrix.postScale(-1, 1);
-                    Log.d(TAG, "Orientation is FLIP VERTICAL");
-                    break;
-                case ExifInterface.ORIENTATION_TRANSPOSE:
-                    Log.d(TAG, "Orientation is TRANSPOSE");
-                    matrix.setRotate(90);
-                    matrix.postScale(-1, 1);
-                    break;
                 case ExifInterface.ORIENTATION_ROTATE_90:
                     matrix.setRotate(90);
-                    Log.d(TAG, "Orientation is ROTATE 90");
-                    break;
-                case ExifInterface.ORIENTATION_TRANSVERSE:
-                    matrix.setRotate(-90);
-                    matrix.postScale(-1, 1);
-                    Log.d(TAG, "Orientation is TRANSVERSE");
                     break;
                 case ExifInterface.ORIENTATION_ROTATE_270:
                     matrix.setRotate(-90);
-                    Log.d(TAG, "Orientation is ROTATE 270");
                     break;
                 default:
                     return bitmap;
@@ -98,31 +27,22 @@ public class BitmapProcessingUtils {
                 Bitmap bmRotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
                 bitmap.recycle();
                 return bmRotated;
-            }
-            catch (OutOfMemoryError e) {
-                e.printStackTrace();
-                return null;
+            } catch (OutOfMemoryError e) {
+                return bitmap;
             }
     }
 
     public static Bitmap resize(String imagePath, int width, int height) {
 
-        // Get the dimensions of the bitmap
         BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
         bitmapOptions.inJustDecodeBounds = true;
+
         BitmapFactory.decodeFile(imagePath, bitmapOptions);
         int photoW = bitmapOptions.outWidth;
         int photoH = bitmapOptions.outHeight;
 
-        // Determine how much to scale down the image
-        int scaleFactor;
-        try {
-            scaleFactor = Math.min(photoW / width, photoH / height);
-        } catch( ArithmeticException e){
-            scaleFactor = 1;
-        }
+        int scaleFactor = getScaleFactor(width, height, photoW, photoH);
 
-        // Decode the image file into a Bitmap sized to fill the View
         bitmapOptions.inJustDecodeBounds = false;
         bitmapOptions.inSampleSize = scaleFactor;
         bitmapOptions.inPurgeable = true;
@@ -130,6 +50,14 @@ public class BitmapProcessingUtils {
         Bitmap bitmap = BitmapFactory.decodeFile(imagePath, bitmapOptions);
 
         return bitmap;
+    }
+
+    private static int getScaleFactor(int width, int height, int photoWidth, int photoHeight) {
+        try {
+            return Math.min(photoWidth / width, photoHeight / height);
+        } catch(ArithmeticException e) {
+            return 1;
+        }
     }
 
     public Bitmap combineImages(Bitmap frame, Bitmap image) {

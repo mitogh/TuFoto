@@ -29,10 +29,13 @@ public class Main extends ActionBarActivity{
         setContentView(R.layout.activity_main);
 
         getSupportActionBar().hide();
-
         ButterKnife.inject(Main.this);
 
-        disableTakePhotoButtonIf(!CameraHardware.exits(getApplicationContext()));
+        disableTakePhotoButtonIf(
+                !CameraHardware.exits(
+                        getApplicationContext()
+                )
+        );
 
         takePhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
